@@ -48,7 +48,6 @@ import com.google.android.exoplayer2.mediacodec.MediaCodecUtil.DecoderQueryExcep
 import com.google.android.exoplayer2.source.DefaultMediaSourceFactory;
 import com.google.android.exoplayer2.source.MediaSourceFactory;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelectionParameters;
 import com.google.android.exoplayer2.ui.StyledPlayerControlView;
 import com.google.android.exoplayer2.ui.StyledPlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
@@ -82,7 +81,6 @@ public class AnahaPlayerActivity extends AppCompatActivity implements OnClickLis
     private static final String KEY_AUTO_PLAY = "auto_play";
 
     protected StyledPlayerView playerView;
-    protected TextView debugTextView;
     protected @Nullable
     ExoPlayer player;
 
@@ -109,10 +107,11 @@ public class AnahaPlayerActivity extends AppCompatActivity implements OnClickLis
         dataSourceFactory = DemoUtil.getDataSourceFactory(/* context= */ this);
 
         setContentView();
-        debugTextView = findViewById(R.id.debug_text_view);
         selectTracks = findViewById(R.id.select_tracks_button);
         selectTracks.setOnClickListener(this);
         exoFullscreen = findViewById(R.id.exo_fullscreen);
+        exoFullscreen.setEnabled(false);
+        exoFullscreen.getDrawable().setTint(getColor(R.color.unplayed));
         //exoPause = findViewById(R.id.exo_pause);
 
         playerView = findViewById(R.id.player_view);
@@ -348,8 +347,8 @@ public class AnahaPlayerActivity extends AppCompatActivity implements OnClickLis
             player.setAudioAttributes(AudioAttributes.DEFAULT, /* handleAudioFocus= */ true);
             player.setPlayWhenReady(startAutoPlay);
             playerView.setPlayer(player);
-            debugViewHelper = new DebugTextViewHelper(player, debugTextView);
-            debugViewHelper.start();
+            /*debugViewHelper = new DebugTextViewHelper(player, debugTextView);
+            debugViewHelper.start();*/
         }
         boolean haveStartPosition = startItemIndex != C.INDEX_UNSET;
         if (haveStartPosition) {
@@ -424,8 +423,8 @@ public class AnahaPlayerActivity extends AppCompatActivity implements OnClickLis
         if (player != null) {
             updateTrackSelectorParameters();
             updateStartPosition();
-            debugViewHelper.stop();
-            debugViewHelper = null;
+            /*debugViewHelper.stop();
+            debugViewHelper = null;*/
             player.release();
             player = null;
             mediaItems = Collections.emptyList();
@@ -460,6 +459,8 @@ public class AnahaPlayerActivity extends AppCompatActivity implements OnClickLis
     private void updateButtonVisibility() {
         selectTracks.setEnabled(
                 player != null && TrackSelectionDialog.willHaveContent(trackSelector));
+        exoFullscreen.setEnabled(true);
+        exoFullscreen.getDrawable().setTint(selectTracks.getCurrentTextColor());
     }
 
     private void showToast(int messageId) {
@@ -473,11 +474,11 @@ public class AnahaPlayerActivity extends AppCompatActivity implements OnClickLis
     @Override
     public void onFullScreenModeChanged(boolean isFullScreen) {
         if (isFullScreen) {
-            exoFullscreen.setImageResource(R.drawable.exo_ic_fullscreen_exit);
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            exoFullscreen.postDelayed(() -> exoFullscreen.setImageResource(R.drawable.exo_ic_fullscreen_exit), 200);
         } else {
-            exoFullscreen.setImageResource(R.drawable.exo_ic_fullscreen_enter);
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+            exoFullscreen.postDelayed(() -> exoFullscreen.setImageResource(R.drawable.exo_ic_fullscreen_enter), 200);
         }
     }
 
