@@ -26,6 +26,7 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -108,6 +109,8 @@ public class AnahaPlayerActivity extends AppCompatActivity implements OnClickLis
         dataSourceFactory = DemoUtil.getDataSourceFactory(/* context= */ this);
 
         setContentView();
+        //make activity full screen
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         selectTracks = findViewById(R.id.select_tracks_button);
         selectTracks.setOnClickListener(this);
         exoFullscreen = findViewById(R.id.exo_fullscreen);
