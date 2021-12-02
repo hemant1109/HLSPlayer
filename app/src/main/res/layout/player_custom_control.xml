@@ -87,21 +87,35 @@
         app:layout_constraintStart_toStartOf="@+id/exo_progress"
         app:layout_constraintTop_toTopOf="@+id/exo_fullscreen"
         tools:text="01:01" />
+    <TextView
+        android:id="@+id/exo_playback_speed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:padding="5dp"
+        android:text="@string/playback_speed"
+        app:layout_constraintBottom_toTopOf="@+id/exo_progress"
+        app:layout_constraintEnd_toStartOf="@+id/exo_fullscreen"
+        app:layout_constraintTop_toTopOf="@+id/exo_fullscreen"
+        tools:text="@string/playback_speed" />
 
     <TextView
         android:id="@+id/select_tracks_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
-        android:text="@string/exo_track_selection_auto"
-        android:padding="5dp"
         android:clickable="true"
+        android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:padding="5dp"
+        android:text="@string/exo_track_selection_auto"
         app:layout_constraintBottom_toTopOf="@+id/exo_progress"
-        app:layout_constraintEnd_toStartOf="@+id/exo_fullscreen"
+        app:layout_constraintEnd_toStartOf="@+id/exo_playback_speed"
         app:layout_constraintTop_toTopOf="@+id/exo_fullscreen"
-        tools:text="@string/exo_track_selection_auto"
-        android:focusable="true" />
+        tools:text="@string/exo_track_selection_auto" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/exo_fullscreen"
@@ -109,13 +123,13 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
         android:adjustViewBounds="true"
-        android:clickable="true"
-        android:padding="5dp"
         android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="5dp"
         android:src="@drawable/exo_ic_fullscreen_enter"
         app:layout_constraintBottom_toTopOf="@+id/exo_progress"
-        app:layout_constraintEnd_toEndOf="@+id/exo_progress"
-        android:focusable="true" />
+        app:layout_constraintEnd_toEndOf="@+id/exo_progress" />
 
     <com.google.android.exoplayer2.ui.DefaultTimeBar
         android:id="@+id/exo_progress"

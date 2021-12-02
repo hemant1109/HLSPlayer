@@ -1,7 +1,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="TrackSelectionDialogThemeOverlay" parent="ThemeOverlay.AppCompat.Dialog.Alert">
+    <style name="TrackSelectionDialogThemeOverlay" parent="Theme.Design.BottomSheetDialog">
         <item name="windowNoTitle">false</item>
+        <item name="android:windowNoTitle">false</item>
     </style>
 
     <style name="PlayerTheme" parent="Theme.AppCompat.NoActionBar">

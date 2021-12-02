@@ -31,11 +31,13 @@
 
     <string name="error_no_secure_decoder">This device does not provide a secure decoder for <xliff:g id="mime_type">%1$s</xliff:g></string>
 
-    <string name="track_selection_title">Select tracks</string>
+    <string name="track_selection_title">Video quality</string>
 
     <string name="enter_urls">Enter URLs</string>
     <string name="sample_list_load_error">One or more sample lists failed to load</string>
 
     <string name="prefer_extension_decoders">Prefer extension decoders</string>
+    <string name="normal">Normal</string>
+    <string name="playback_speed">Speed</string>
 
 </resources>

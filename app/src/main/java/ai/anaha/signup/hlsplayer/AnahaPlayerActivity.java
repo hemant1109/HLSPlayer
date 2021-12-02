@@ -26,6 +26,7 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -240,14 +241,14 @@ public class AnahaPlayerActivity extends AppCompatActivity implements OnClickLis
                 && TrackSelectionDialog.willHaveContent(trackSelector)) {
             isShowingTrackSelectionDialog = true;
             TrackSelectionDialog trackSelectionDialog =
-                    TrackSelectionDialog.createForTrackSelector(
+                    TrackSelectionDialog.createForTrackSelector(true, false, false,
                             trackSelector, (width, height) -> {
-                                String string = "";
+                                String string = height + "p";
                                 if (width == -1 && height == -1) {
                                     string = String.format("%s (%s)",
                                             getString(R.string.exo_track_selection_auto),
                                             getVideoQualityString(Objects.requireNonNull(Objects.requireNonNull(player).getVideoFormat()).width, Objects.requireNonNull(player.getVideoFormat()).height));
-                                } else if (width == 1920 && height == 1080) {
+                                }/* else if (width == 1920 && height == 1080) {
                                     string = getString(R.string.exo_track_selection_fhd);
                                 } else if (width == 1600 && height == 900) {
                                     string = getString(R.string.exo_track_selection_hdp);
@@ -267,7 +268,7 @@ public class AnahaPlayerActivity extends AppCompatActivity implements OnClickLis
                                 } else {
                                     string = getString(com.google.android.exoplayer2.ui.R.string.exo_track_resolution,
                                             width, height);
-                                }
+                                }*/
                                 selectTracks.setText(string);
                             },
                             /* onDismissListener= */ dismissedDialog -> isShowingTrackSelectionDialog = false);
@@ -276,9 +277,9 @@ public class AnahaPlayerActivity extends AppCompatActivity implements OnClickLis
     }
 
     String getVideoQualityString(int width, int height) {
-        String string = "";
-        if (width == 1920 && height == 1080) {
-            string = getString(R.string.exo_track_selection_fhd);
+        String string = height + "p";
+        /*if (width == 1920 && height == 1080) {
+            string = height+"p";
         } else if (width == 1600 && height == 900) {
             string = getString(R.string.exo_track_selection_hdp);
         } else if (width == 1280 && height == 720) {
@@ -291,7 +292,7 @@ public class AnahaPlayerActivity extends AppCompatActivity implements OnClickLis
             string = getString(R.string.exo_track_selection_360p);
         } else if (width == 576 && height == 324) {
             string = getString(R.string.exo_track_selection_360p);
-        }
+        }*/
         return string;
     }
 
@@ -327,20 +328,19 @@ public class AnahaPlayerActivity extends AppCompatActivity implements OnClickLis
            /*boolean preferExtensionDecoders =
                     playerActivityIntent.getBooleanExtra(IntentUtil.PREFER_EXTENSION_DECODERS_EXTRA, false);*/
             RenderersFactory renderersFactory =
-                    DemoUtil.buildRenderersFactory(/* context= */ this, false);
+                    DemoUtil.buildRenderersFactory(/* context= */ this, /*preferExtensionDecoders*/false);
             MediaSourceFactory mediaSourceFactory =
                     new DefaultMediaSourceFactory(dataSourceFactory)
                             .setAdViewProvider(playerView);
 
             trackSelector = new DefaultTrackSelector(/* context= */ this);
             lastSeenTracksInfo = TracksInfo.EMPTY;
-            player =
-                    new ExoPlayer.Builder(/* context= */ this)
-                            .setRenderersFactory(renderersFactory)
-                            .setMediaSourceFactory(mediaSourceFactory)
-                            .setTrackSelector(trackSelector)
-                            .setSeekForwardIncrementMs(10 * 1000)
-                            .build();
+            player = new ExoPlayer.Builder(/* context= */ this)
+                    .setRenderersFactory(renderersFactory)
+                    .setMediaSourceFactory(mediaSourceFactory)
+                    .setTrackSelector(trackSelector)
+                    .setSeekForwardIncrementMs(10 * 1000)
+                    .build();
             player.setTrackSelectionParameters(trackSelectionParameters);
             player.addListener(new PlayerEventListener());
             player.addAnalyticsListener(new EventLogger(trackSelector));
@@ -567,10 +567,5 @@ public class AnahaPlayerActivity extends AppCompatActivity implements OnClickLis
             }
             return Pair.create(0, errorString);
         }
-    }
-
-    private static boolean isNonNullAndChecked(@Nullable MenuItem menuItem) {
-        // Temporary workaround for layouts that do not inflate the options menu.
-        return menuItem != null && menuItem.isChecked();
     }
 }
