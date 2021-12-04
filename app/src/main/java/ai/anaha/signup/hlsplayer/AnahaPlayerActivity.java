@@ -101,7 +101,6 @@ public class AnahaPlayerActivity extends AppCompatActivity implements OnClickLis
     private long startPosition;
     private float playbackSpeed = 1;
     private TrackSelectionDialog trackSelectionDialog;
-    private View root;
     // For ad playback only.
     // Activity lifecycle.
 
@@ -123,7 +122,7 @@ public class AnahaPlayerActivity extends AppCompatActivity implements OnClickLis
         exoFullscreen.setEnabled(false);
         exoFullscreen.getDrawable().setTint(getColor(R.color.unplayed));
         //exoPause = findViewById(R.id.exo_pause);
-        root = findViewById(R.id.root);
+        View root = findViewById(R.id.root);
         playerView = findViewById(R.id.player_view);
         playerView.setControllerVisibilityListener(this);
         playerView.setErrorMessageProvider(new PlayerErrorMessageProvider());
@@ -154,7 +153,13 @@ public class AnahaPlayerActivity extends AppCompatActivity implements OnClickLis
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
-
+    @Override
+    public void onBackPressed() {
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            exoFullscreen.performClick();
+        } else
+            super.onBackPressed();
+    }
 //    @Override
 //    public void onConfigurationChanged(@NonNull Configuration newConfig) {
 //        super.onConfigurationChanged(newConfig);
