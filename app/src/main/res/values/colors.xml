@@ -11,11 +11,14 @@
     <color name="exo_white_opacity_70">#B3ffffff</color>
     <color name="exo_black_opacity_70">#B3000000</color>
     <color name="exo_black_opacity_60">#98000000</color>
+    <color name="exo_black_opacity_05">#0D000000</color>
+    <color name="exo_black_1">#212121</color>
+
     <color name="exo_styled_error_message_background">#80808080</color>
     <color name="exo_bottom_bar_background">#b0000000</color>
     <color name="anaha_blue">#2E64DE</color>
     <color name="buffered">#BECEF3</color>
     <color name="played">#3662C6</color>
     <color name="scrubber">#114ACC</color>
-    <color name="unplayed">#59FFFFFF</color>
+    <color name="unplayed">#26FFFFFF</color>
 </resources>

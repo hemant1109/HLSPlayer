@@ -15,6 +15,8 @@
  */
 package ai.anaha.signup.hlsplayer.hlsutils;
 
+import static android.view.View.VISIBLE;
+
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.res.Resources;
@@ -23,16 +25,10 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ScrollView;
-import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatDialog;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.exoplayer2.C;
@@ -42,9 +38,9 @@ import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector.SelectionOverride;
 import com.google.android.exoplayer2.trackselection.MappingTrackSelector.MappedTrackInfo;
-import com.google.android.exoplayer2.ui.TrackNameProvider;
-import com.google.android.exoplayer2.ui.TrackSelectionView;
 import com.google.android.exoplayer2.util.Assertions;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.tabs.TabLayout;
 
@@ -55,6 +51,10 @@ import java.util.Objects;
 
 import ai.anaha.signup.hlsplayer.AnahaPlayerActivity;
 import ai.anaha.signup.hlsplayer.R;
+import ai.anaha.signup.hlsplayer.adapters.FragmentAdapter;
+import ai.anaha.signup.hlsplayer.fragments.PlayBackSpeedViewFragment;
+import ai.anaha.signup.hlsplayer.fragments.TrackSelectionFragment;
+import ai.anaha.signup.hlsplayer.fragments.TrackSelectionViewFragment;
 
 /**
  * Dialog to select tracks.
@@ -62,11 +62,10 @@ import ai.anaha.signup.hlsplayer.R;
 public final class TrackSelectionDialog extends BottomSheetDialogFragment {
 
     private static boolean isVideoSelectionEnabled, isAudioSelectionEnabled, isSubtitleSelectionEnabled = true;
-    private final SparseArray<TrackSelectionViewFragment> tabFragments;
+    private final SparseArray<Fragment> tabFragments;
     private final ArrayList<Integer> tabTrackTypes;
 
-    private int titleId;
-    private DialogInterface.OnClickListener onClickListener;
+    //private DialogInterface.OnClickListener onClickListener;
     private DialogInterface.OnDismissListener onDismissListener;
 
 
@@ -96,24 +95,24 @@ public final class TrackSelectionDialog extends BottomSheetDialogFragment {
      * Creates a dialog for a given {@link DefaultTrackSelector}, whose parameters will be
      * automatically updated when tracks are selected.
      *
-     * @param trackSelector     The {@link DefaultTrackSelector}.
-     * @param onDismissListener A {@link DialogInterface.OnDismissListener} to call when the dialog is
-     *                          dismissed.
+     * @param trackSelector         The {@link DefaultTrackSelector}.
+     * @param onDismissListener     A {@link DialogInterface.OnDismissListener} to call when the dialog is
+     * @param playbackSpeedListener
      */
     public static TrackSelectionDialog createForTrackSelector(Boolean isVideoSelectionEnabled, Boolean isAudioSelectionEnabled, Boolean isSubtitleSelectionEnabled,
                                                               DefaultTrackSelector trackSelector, AnahaPlayerActivity.TrackSelectionName trackSelectionName,
-                                                              DialogInterface.OnDismissListener onDismissListener) {
+                                                              DialogInterface.OnDismissListener onDismissListener, float playbackSpeed,
+                                                              AnahaPlayerActivity.PlaybackSpeedListener playbackSpeedListener) {
         MappedTrackInfo mappedTrackInfo =
                 Assertions.checkNotNull(trackSelector.getCurrentMappedTrackInfo());
         TrackSelectionDialog trackSelectionDialog = new TrackSelectionDialog();
         DefaultTrackSelector.Parameters parameters = trackSelector.getParameters();
         trackSelectionDialog.init(isVideoSelectionEnabled, isAudioSelectionEnabled, isSubtitleSelectionEnabled,
-                /* titleId= */ R.string.track_selection_title,
                 mappedTrackInfo,
                 /* initialParameters = */ parameters,
                 /* allowAdaptiveSelections= */ false,
                 /* allowMultipleOverrides= */ false,
-                /* onClickListener= */ (dialog, which) -> {
+                /* onCustomTrackSelectedListener= */ () -> {
                     DefaultTrackSelector.ParametersBuilder builder = parameters.buildUpon();
                     for (int i = 0; i < mappedTrackInfo.getRendererCount(); i++) {
                         builder
@@ -151,43 +150,37 @@ public final class TrackSelectionDialog extends BottomSheetDialogFragment {
                         }
                     }
                     trackSelector.setParameters(builder);
+                    trackSelectionDialog.dismiss();
                 },
-                onDismissListener);
+                onDismissListener, playbackSpeed, playbackSpeedListener);
         return trackSelectionDialog;
     }
 
     /**
      * Creates a dialog for given {@link MappedTrackInfo} and {@link DefaultTrackSelector.Parameters}.
      *
-     * @param titleId                 The resource id of the dialog title.
      * @param mappedTrackInfo         The {@link MappedTrackInfo} to display.
      * @param initialParameters       The {@link DefaultTrackSelector.Parameters} describing the
      *                                initial track selection.
      * @param allowAdaptiveSelections Whether adaptive selections (consisting of more than one track)
      *                                can be made.
      * @param allowMultipleOverrides  Whether tracks from multiple track groups can be selected.
-     * @param onClickListener         {@link DialogInterface.OnClickListener} called when tracks are
-     *                                selected.
      * @param onDismissListener       {@link DialogInterface.OnDismissListener} called when the dialog
      *                                is dismissed.
      */
     public static TrackSelectionDialog createForMappedTrackInfoAndParameters(Boolean isVideoSelectionEnabled, Boolean isAudioSelectionEnabled, Boolean isSubtitleSelectionEnabled,
-                                                                             int titleId,
-                                                                             MappedTrackInfo mappedTrackInfo, TextView selectedTrack,
+                                                                             MappedTrackInfo mappedTrackInfo,
                                                                              DefaultTrackSelector.Parameters initialParameters,
                                                                              boolean allowAdaptiveSelections,
-                                                                             boolean allowMultipleOverrides,
-                                                                             DialogInterface.OnClickListener onClickListener,
+                                                                             boolean allowMultipleOverrides, OnCustomTrackSelectedListener onCustomTrackSelectedListener,
                                                                              DialogInterface.OnDismissListener onDismissListener) {
         TrackSelectionDialog trackSelectionDialog = new TrackSelectionDialog();
         trackSelectionDialog.init(isVideoSelectionEnabled, isAudioSelectionEnabled, isSubtitleSelectionEnabled,
-                titleId,
                 mappedTrackInfo,
                 initialParameters,
                 allowAdaptiveSelections,
-                allowMultipleOverrides,
-                onClickListener,
-                onDismissListener);
+                allowMultipleOverrides, onCustomTrackSelectedListener,
+                onDismissListener, 1,/*playbackSpeedListener*/null);
         return trackSelectionDialog;
     }
 
@@ -199,15 +192,11 @@ public final class TrackSelectionDialog extends BottomSheetDialogFragment {
     }
 
     private void init(Boolean isVideoSelectionEnabled, Boolean isAudioSelectionEnabled, Boolean isSubtitleSelectionEnabled,
-                      int titleId,
                       MappedTrackInfo mappedTrackInfo,
                       DefaultTrackSelector.Parameters initialParameters,
                       boolean allowAdaptiveSelections,
-                      boolean allowMultipleOverrides,
-                      DialogInterface.OnClickListener onClickListener,
-                      DialogInterface.OnDismissListener onDismissListener) {
-        this.titleId = titleId;
-        this.onClickListener = onClickListener;
+                      boolean allowMultipleOverrides, OnCustomTrackSelectedListener customTrackSelectedListener,
+                      DialogInterface.OnDismissListener onDismissListener, float playbackSpeed, AnahaPlayerActivity.PlaybackSpeedListener playbackSpeedListener) {
         this.onDismissListener = onDismissListener;
         TrackSelectionDialog.isVideoSelectionEnabled = isVideoSelectionEnabled;
         TrackSelectionDialog.isAudioSelectionEnabled = isAudioSelectionEnabled;
@@ -216,18 +205,24 @@ public final class TrackSelectionDialog extends BottomSheetDialogFragment {
             if (showTabForRenderer(mappedTrackInfo, i)) {
                 int trackType = mappedTrackInfo.getRendererType(/* rendererIndex= */ i);
                 TrackGroupArray trackGroupArray = mappedTrackInfo.getTrackGroups(i);
-                TrackSelectionViewFragment tabFragment = new TrackSelectionViewFragment();
+                TrackSelectionFragment tabFragment = new TrackSelectionFragment();
                 tabFragment.init(
                         mappedTrackInfo,
                         /* rendererIndex= */ i,
                         initialParameters.getRendererDisabled(/* rendererIndex= */ i),
                         initialParameters.getSelectionOverride(/* rendererIndex= */ i, trackGroupArray),
                         allowAdaptiveSelections,
-                        allowMultipleOverrides);
+                        allowMultipleOverrides, customTrackSelectedListener,null);
                 tabFragments.put(i, tabFragment);
                 tabTrackTypes.add(trackType);
             }
         }
+        tabFragments.put(tabFragments.size(), new PlayBackSpeedViewFragment(playbackSpeed, playbackSpeedListener));
+        tabTrackTypes.add(C.TRACK_TYPE_CUSTOM_BASE);
+    }
+
+    public interface OnCustomTrackSelectedListener {
+        void onTrackSelected();
     }
 
     /**
@@ -237,8 +232,11 @@ public final class TrackSelectionDialog extends BottomSheetDialogFragment {
      * @return Whether the renderer is disabled.
      */
     public boolean getIsDisabled(int rendererIndex) {
-        TrackSelectionViewFragment rendererView = tabFragments.get(rendererIndex);
-        return rendererView != null && rendererView.isDisabled;
+        if (tabFragments.get(rendererIndex) instanceof TrackSelectionFragment) {
+            TrackSelectionFragment rendererView = (TrackSelectionFragment) tabFragments.get(rendererIndex);
+            return rendererView != null && rendererView.isDisabled;
+        }
+        return false;
     }
 
     /**
@@ -249,8 +247,11 @@ public final class TrackSelectionDialog extends BottomSheetDialogFragment {
      * @return The list of track selection overrides for this renderer.
      */
     public List<SelectionOverride> getOverrides(int rendererIndex) {
-        TrackSelectionViewFragment rendererView = tabFragments.get(rendererIndex);
-        return rendererView == null ? Collections.emptyList() : rendererView.overrides;
+        if (tabFragments.get(rendererIndex) instanceof TrackSelectionFragment) {
+            TrackSelectionFragment rendererView = (TrackSelectionFragment) tabFragments.get(rendererIndex);
+            return rendererView == null ? Collections.emptyList() : rendererView.overrides;
+        }
+        return Collections.emptyList();
     }
 
     @Override
@@ -261,8 +262,11 @@ public final class TrackSelectionDialog extends BottomSheetDialogFragment {
         /*AppCompatDialog dialog =
                 new AppCompatDialog(getActivity(), R.style.TrackSelectionDialogThemeOverlay);
         dialog.setTitle(titleId);*/
-        setCancelable(false);
-        return super.onCreateDialog(savedInstanceState);
+        BottomSheetDialog dialog = (BottomSheetDialog) super.onCreateDialog(savedInstanceState);
+        dialog.getBehavior().setPeekHeight(Resources.getSystem().getDisplayMetrics().heightPixels);
+        dialog.getBehavior().setState(BottomSheetBehavior.STATE_EXPANDED);
+        dialog.getBehavior().setDraggable(false);
+        return dialog;
     }
 
     @Override
@@ -270,12 +274,8 @@ public final class TrackSelectionDialog extends BottomSheetDialogFragment {
         return R.style.TrackSelectionDialogThemeOverlay;
     }
 
-    public int getTitleId() {
-        return titleId;
-    }
-
     @Override
-    public void onDismiss(DialogInterface dialog) {
+    public void onDismiss(@NonNull DialogInterface dialog) {
         super.onDismiss(dialog);
         onDismissListener.onDismiss(dialog);
     }
@@ -286,17 +286,18 @@ public final class TrackSelectionDialog extends BottomSheetDialogFragment {
         View dialogView = inflater.inflate(R.layout.track_selection_dialog, container, false);
         TabLayout tabLayout = dialogView.findViewById(R.id.track_selection_dialog_tab_layout);
         ViewPager viewPager = dialogView.findViewById(R.id.track_selection_dialog_view_pager);
-        Button cancelButton = dialogView.findViewById(R.id.track_selection_dialog_cancel_button);
-        Button okButton = dialogView.findViewById(R.id.track_selection_dialog_ok_button);
-        viewPager.setAdapter(new FragmentAdapter(getChildFragmentManager()));
+        /*Button cancelButton = dialogView.findViewById(R.id.track_selection_dialog_cancel_button);
+        Button okButton = dialogView.findViewById(R.id.track_selection_dialog_ok_button);*/
+        viewPager.setAdapter(new FragmentAdapter(getResources(), getChildFragmentManager(), tabFragments, tabTrackTypes));
         tabLayout.setupWithViewPager(viewPager);
-        tabLayout.setVisibility(tabFragments.size() > 1 ? View.VISIBLE : View.GONE);
-        cancelButton.setOnClickListener(view -> dismiss());
-        okButton.setOnClickListener(
+        tabLayout.setVisibility(tabFragments.size() > 1 ? VISIBLE : View.GONE);
+        //cancelButton.setOnClickListener(view -> dismiss());
+        /*okButton.setOnClickListener(
                 view -> {
                     onClickListener.onClick(getDialog(), DialogInterface.BUTTON_POSITIVE);
                     dismiss();
-                });
+                });*/
+
         return dialogView;
     }
 
@@ -325,7 +326,7 @@ public final class TrackSelectionDialog extends BottomSheetDialogFragment {
         }
     }
 
-    private static String getTrackTypeString(Resources resources, int trackType) {
+    public static String getTrackTypeString(Resources resources, int trackType) {
         switch (trackType) {
             case C.TRACK_TYPE_VIDEO:
                 return resources.getString(R.string.exo_track_selection_title_video);
@@ -333,100 +334,11 @@ public final class TrackSelectionDialog extends BottomSheetDialogFragment {
                 return resources.getString(R.string.exo_track_selection_title_audio);
             case C.TRACK_TYPE_TEXT:
                 return resources.getString(R.string.exo_track_selection_title_text);
+            case C.TRACK_TYPE_CUSTOM_BASE:
+                return resources.getString(R.string.playback_speed);
             default:
                 throw new IllegalArgumentException();
         }
     }
 
-    private final class FragmentAdapter extends FragmentPagerAdapter {
-
-        public FragmentAdapter(FragmentManager fragmentManager) {
-            super(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return tabFragments.valueAt(position);
-        }
-
-        @Override
-        public int getCount() {
-            return tabFragments.size();
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return getTrackTypeString(getResources(), tabTrackTypes.get(position));
-        }
-    }
-
-    /**
-     * Fragment to show a track selection in tab of the track selection dialog.
-     */
-    public static final class TrackSelectionViewFragment extends Fragment
-            implements TrackSelectionView.TrackSelectionListener {
-
-        private MappedTrackInfo mappedTrackInfo;
-        private int rendererIndex;
-        private boolean allowAdaptiveSelections;
-        private boolean allowMultipleOverrides;
-
-        /* package */ boolean isDisabled;
-        /* package */ List<SelectionOverride> overrides;
-
-        public TrackSelectionViewFragment() {
-            // Retain instance across activity re-creation to prevent losing access to init data.
-            setRetainInstance(true);
-        }
-
-        public void init(
-                MappedTrackInfo mappedTrackInfo,
-                int rendererIndex,
-                boolean initialIsDisabled,
-                @Nullable SelectionOverride initialOverride,
-                boolean allowAdaptiveSelections,
-                boolean allowMultipleOverrides) {
-            this.mappedTrackInfo = mappedTrackInfo;
-            this.rendererIndex = rendererIndex;
-            this.isDisabled = initialIsDisabled;
-            this.overrides =
-                    initialOverride == null
-                            ? Collections.emptyList()
-                            : Collections.singletonList(initialOverride);
-            this.allowAdaptiveSelections = allowAdaptiveSelections;
-            this.allowMultipleOverrides = allowMultipleOverrides;
-        }
-
-        @Override
-        public View onCreateView(
-                LayoutInflater inflater,
-                @Nullable ViewGroup container,
-                @Nullable Bundle savedInstanceState) {
-            View rootView =
-                    inflater.inflate(
-                            R.layout.exo_track_selection_dialog, container, /* attachToRoot= */ false);
-            ((ViewGroup.LayoutParams) rootView.getLayoutParams()).height = ViewGroup.LayoutParams.WRAP_CONTENT;
-            ((ViewGroup.LayoutParams) rootView.getLayoutParams()).width = ViewGroup.LayoutParams.WRAP_CONTENT;
-            TrackSelectionView trackSelectionView = rootView.findViewById(R.id.exo_track_selection_view);
-            trackSelectionView.setShowDisableOption(true);
-            trackSelectionView.setAllowMultipleOverrides(allowMultipleOverrides);
-            trackSelectionView.setAllowAdaptiveSelections(allowAdaptiveSelections);
-            trackSelectionView.setTrackNameProvider(format -> format.height + "p");
-            trackSelectionView.setShowDisableOption(false);
-            trackSelectionView.init(
-                    mappedTrackInfo,
-                    rendererIndex,
-                    isDisabled,
-                    overrides,
-                    /* trackFormatComparator= */ null,
-                    /* listener= */ this);
-            return rootView;
-        }
-
-        @Override
-        public void onTrackSelectionChanged(boolean isDisabled, List<SelectionOverride> overrides) {
-            this.isDisabled = isDisabled;
-            this.overrides = overrides;
-        }
-    }
 }

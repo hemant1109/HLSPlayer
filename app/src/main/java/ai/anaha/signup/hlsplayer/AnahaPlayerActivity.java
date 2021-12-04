@@ -17,21 +17,23 @@ package ai.anaha.signup.hlsplayer;
 
 import static com.google.android.exoplayer2.util.Assertions.checkNotNull;
 
+import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Pair;
 import android.view.KeyEvent;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.FloatRange;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -52,6 +54,7 @@ import com.google.android.exoplayer2.source.MediaSourceFactory;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.ui.StyledPlayerControlView;
 import com.google.android.exoplayer2.ui.StyledPlayerView;
+import com.google.android.exoplayer2.ui.TrackSelectionDialogBuilder;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.util.DebugTextViewHelper;
 import com.google.android.exoplayer2.util.ErrorMessageProvider;
@@ -62,7 +65,6 @@ import com.google.android.exoplayer2.video.VideoSize;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 import ai.anaha.signup.hlsplayer.hlsutils.DemoUtil;
 import ai.anaha.signup.hlsplayer.hlsutils.IntentUtil;
@@ -87,8 +89,8 @@ public class AnahaPlayerActivity extends AppCompatActivity implements OnClickLis
     ExoPlayer player;
 
     private boolean isShowingTrackSelectionDialog;
-    private TextView selectTracks;
-    private ImageView exoFullscreen;
+    private TextView exoDuration;
+    private ImageView exoFullscreen, ivPlayerMenu;
 
     private DataSource.Factory dataSourceFactory;
     private List<MediaItem> mediaItems;
@@ -99,7 +101,8 @@ public class AnahaPlayerActivity extends AppCompatActivity implements OnClickLis
     private boolean startAutoPlay;
     private int startItemIndex;
     private long startPosition;
-
+    private float playbackSpeed = 1;
+    private TrackSelectionDialog trackSelectionDialog;
     // For ad playback only.
     // Activity lifecycle.
 
@@ -109,10 +112,14 @@ public class AnahaPlayerActivity extends AppCompatActivity implements OnClickLis
         dataSourceFactory = DemoUtil.getDataSourceFactory(/* context= */ this);
 
         setContentView();
-        //make activity full screen
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        selectTracks = findViewById(R.id.select_tracks_button);
-        selectTracks.setOnClickListener(this);
+
+//        selectTracks = findViewById(R.id.select_tracks_button);
+//        selectTracks.setOnClickListener(this);
+        exoDuration = findViewById(R.id.exo_duration);
+
+        ivPlayerMenu = findViewById(R.id.ivPlayerMenu);
+        ivPlayerMenu.setOnClickListener(this);
+
         exoFullscreen = findViewById(R.id.exo_fullscreen);
         exoFullscreen.setEnabled(false);
         exoFullscreen.getDrawable().setTint(getColor(R.color.unplayed));
@@ -136,6 +143,25 @@ public class AnahaPlayerActivity extends AppCompatActivity implements OnClickLis
             trackSelectionParameters =
                     new DefaultTrackSelector.ParametersBuilder(/* context= */ this).build();
             clearStartPosition();
+        }
+        int orientation = getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            exoFullscreen.performClick();
+        }
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        // Checks the orientation of the screen
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            //make activity full screen/ Landscape
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            //end
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            //make activity portrait
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            //end
         }
     }
 
@@ -239,19 +265,19 @@ public class AnahaPlayerActivity extends AppCompatActivity implements OnClickLis
 
     @Override
     public void onClick(View view) {
-        if (view == selectTracks
+        if (view == ivPlayerMenu
                 && !isShowingTrackSelectionDialog
                 && TrackSelectionDialog.willHaveContent(trackSelector)) {
             isShowingTrackSelectionDialog = true;
-            TrackSelectionDialog trackSelectionDialog =
+            trackSelectionDialog =
                     TrackSelectionDialog.createForTrackSelector(true, false, false,
                             trackSelector, (width, height) -> {
-                                String string = height + "p";
+                                /*String string = height + "p";
                                 if (width == -1 && height == -1) {
                                     string = String.format("%s (%s)",
                                             getString(R.string.exo_track_selection_auto),
                                             getVideoQualityString(Objects.requireNonNull(Objects.requireNonNull(player).getVideoFormat()).width, Objects.requireNonNull(player.getVideoFormat()).height));
-                                }/* else if (width == 1920 && height == 1080) {
+                                } else if (width == 1920 && height == 1080) {
                                     string = getString(R.string.exo_track_selection_fhd);
                                 } else if (width == 1600 && height == 900) {
                                     string = getString(R.string.exo_track_selection_hdp);
@@ -272,16 +298,23 @@ public class AnahaPlayerActivity extends AppCompatActivity implements OnClickLis
                                     string = getString(com.google.android.exoplayer2.ui.R.string.exo_track_resolution,
                                             width, height);
                                 }*/
-                                selectTracks.setText(string);
+                                //selectTracks.setText(string);
                             },
-                            /* onDismissListener= */ dismissedDialog -> isShowingTrackSelectionDialog = false);
+                            /* onDismissListener= */ dismissedDialog -> isShowingTrackSelectionDialog = false, playbackSpeed, speed -> {
+                                if (player != null) {
+                                    playbackSpeed = speed;
+                                    player.setPlaybackSpeed(speed);
+                                    trackSelectionDialog.dismiss();
+                                }
+                            });
             trackSelectionDialog.show(getSupportFragmentManager(), /* tag= */ null);
+
         }
     }
 
-    String getVideoQualityString(int width, int height) {
+    /*String getVideoQualityString(int width, int height) {
         String string = height + "p";
-        /*if (width == 1920 && height == 1080) {
+        if (width == 1920 && height == 1080) {
             string = height+"p";
         } else if (width == 1600 && height == 900) {
             string = getString(R.string.exo_track_selection_hdp);
@@ -295,13 +328,17 @@ public class AnahaPlayerActivity extends AppCompatActivity implements OnClickLis
             string = getString(R.string.exo_track_selection_360p);
         } else if (width == 576 && height == 324) {
             string = getString(R.string.exo_track_selection_360p);
-        }*/
+        }
         return string;
-    }
+    }*/
 
     public interface TrackSelectionName {
 
         void selectedTrackName(int width, int height);
+    }
+
+    public interface PlaybackSpeedListener {
+        void setPlaybackSpeed(@FloatRange(from = 0, fromInclusive = false) float speed);
     }
     // PlayerControlView.VisibilityListener implementation
 
@@ -460,10 +497,10 @@ public class AnahaPlayerActivity extends AppCompatActivity implements OnClickLis
     // User controls
 
     private void updateButtonVisibility() {
-        selectTracks.setEnabled(
-                player != null && TrackSelectionDialog.willHaveContent(trackSelector));
+        /*selectTracks.setEnabled(
+                player != null && TrackSelectionDialog.willHaveContent(trackSelector));*/
         exoFullscreen.setEnabled(true);
-        exoFullscreen.getDrawable().setTint(selectTracks.getCurrentTextColor());
+        exoFullscreen.getDrawable().setTint(exoDuration.getCurrentTextColor());
     }
 
     private void showToast(int messageId) {
@@ -474,13 +511,14 @@ public class AnahaPlayerActivity extends AppCompatActivity implements OnClickLis
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
     }
 
+    @SuppressLint("SourceLockedOrientationActivity")
     @Override
     public void onFullScreenModeChanged(boolean isFullScreen) {
         if (isFullScreen) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
             exoFullscreen.postDelayed(() -> exoFullscreen.setImageResource(R.drawable.exo_ic_fullscreen_exit), 200);
         } else {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             exoFullscreen.postDelayed(() -> exoFullscreen.setImageResource(R.drawable.exo_ic_fullscreen_enter), 200);
         }
     }
@@ -501,14 +539,14 @@ public class AnahaPlayerActivity extends AppCompatActivity implements OnClickLis
 
         @Override
         public void onVideoSizeChanged(@NonNull VideoSize videoSize) {
-            if (selectTracks.getText().toString().contains(getString(R.string.exo_track_selection_auto))) {
+            /*if (selectTracks.getText().toString().contains(getString(R.string.exo_track_selection_auto))) {
                 if (player != null && player.getVideoFormat() != null) {
                     selectTracks.setText(String.format("%s (%s)",
                             getString(R.string.exo_track_selection_auto),
                             getVideoQualityString(player.getVideoFormat().width,
                                     player.getVideoFormat().height)));
                 }
-            }
+            }*/
         }
 
         @Override

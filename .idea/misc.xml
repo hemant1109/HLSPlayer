@@ -3,17 +3,25 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../mnt/86044C91044C85E1/AndroidSetup/android-sdk-ubuntu/platforms/android-31/data/res/drawable/control_background_40dp_material.xml" value="0.371875" />
+        <entry key="../../../../mnt/86044C91044C85E1/AndroidSetup/android-sdk-ubuntu/platforms/android-31/data/res/layout/simple_list_item_single_choice.xml" value="0.35572916666666665" />
+        <entry key="../../.gradle/caches/transforms-3/b0d7be698c5c971becdcbccc742104e1/transformed/jetified-exoplayer-ui-2.16.1/res/drawable-anydpi-v21/exo_ic_check.xml" value="0.30625" />
         <entry key="../../.gradle/caches/transforms-3/b0d7be698c5c971becdcbccc742104e1/transformed/jetified-exoplayer-ui-2.16.1/res/drawable-anydpi-v21/exo_ic_rewind.xml" value="0.15625" />
         <entry key="../../.gradle/caches/transforms-3/b0d7be698c5c971becdcbccc742104e1/transformed/jetified-exoplayer-ui-2.16.1/res/layout-v23/exo_styled_player_control_rewind_button.xml" value="0.259375" />
         <entry key="../../.gradle/caches/transforms-3/b0d7be698c5c971becdcbccc742104e1/transformed/jetified-exoplayer-ui-2.16.1/res/layout/exo_styled_player_control_ffwd_button.xml" value="0.259375" />
         <entry key="../../.gradle/caches/transforms-3/b0d7be698c5c971becdcbccc742104e1/transformed/jetified-exoplayer-ui-2.16.1/res/layout/exo_styled_player_control_rewind_button.xml" value="0.259375" />
+        <entry key="../../.gradle/caches/transforms-3/b0d7be698c5c971becdcbccc742104e1/transformed/jetified-exoplayer-ui-2.16.1/res/layout/exo_styled_settings_list.xml" value="0.203125" />
+        <entry key="../../.gradle/caches/transforms-3/b0d7be698c5c971becdcbccc742104e1/transformed/jetified-exoplayer-ui-2.16.1/res/layout/exo_styled_sub_settings_list_item.xml" value="0.29010416666666666" />
         <entry key="../../.gradle/caches/transforms-3/b0d7be698c5c971becdcbccc742104e1/transformed/jetified-exoplayer-ui-2.16.1/res/layout/exo_track_selection_dialog.xml" value="0.35572916666666665" />
+        <entry key="app/src/main/res/drawable/ic_menu_vert_24.xml" value="0.371875" />
         <entry key="app/src/main/res/layout/activity_player.xml" value="0.3138888888888889" />
         <entry key="app/src/main/res/layout/anaha_player_activity.xml" value="0.35572916666666665" />
-        <entry key="app/src/main/res/layout/player_custom_control.xml" value="0.35572916666666665" />
+        <entry key="app/src/main/res/layout/custom_exo_track_selection_dialog.xml" value="0.203125" />
+        <entry key="app/src/main/res/layout/player_custom_control.xml" value="0.6128798842257598" />
         <entry key="app/src/main/res/layout/sample_list_item.xml" value="0.35572916666666665" />
         <entry key="app/src/main/res/layout/track_selection_dialog.xml" value="0.35572916666666665" />
         <entry key="app/src/main/res/menu/sample_chooser_menu.xml" value="0.35572916666666665" />
+        <entry key="app/src/main/res/menu/settings_menu.xml" value="0.35572916666666665" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.36615384615384616" />
       </map>
     </option>

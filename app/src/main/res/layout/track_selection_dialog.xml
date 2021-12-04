@@ -12,54 +12,30 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
-    android:layout_height="400dp"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:padding="5dp"
-        android:textSize="16sp"
-        android:text="@string/track_selection_title" />
-
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/track_selection_dialog_view_pager"
-        android:layout_width="wrap_content"
-        android:layout_height="300dp">
-
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/track_selection_dialog_tab_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:tabGravity="fill"
-            app:tabMode="fixed" />
-
-    </androidx.viewpager.widget.ViewPager>
-
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="end"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
-        <Button
-            android:id="@+id/track_selection_dialog_cancel_button"
-            style="?android:attr/borderlessButtonStyle"
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/track_selection_dialog_view_pager"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@android:string/cancel" />
+            android:layout_height="300dp">
 
-        <Button
-            android:id="@+id/track_selection_dialog_ok_button"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@android:string/ok" />
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/track_selection_dialog_tab_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:tabGravity="fill"
+                app:tabIndicatorColor="@color/white"
+                app:tabMode="fixed" />
 
+        </androidx.viewpager.widget.ViewPager>
     </LinearLayout>
-
-</LinearLayout>
+</ScrollView>

@@ -3,9 +3,19 @@
     <style name="TrackSelectionDialogThemeOverlay" parent="Theme.Design.BottomSheetDialog">
         <item name="windowNoTitle">false</item>
         <item name="android:windowNoTitle">false</item>
+        <item name="android:colorBackground">@color/exo_black_1</item>
     </style>
 
-    <style name="PlayerTheme" parent="Theme.AppCompat.NoActionBar">
+    <style name="PlayerTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="android:windowBackground">@android:color/black</item>
+    </style>
+    <style name="Base.Widget.Design.TabLayout" parent="android:Widget">
+        <item name="tabIndicatorColor">@android:color/transparent</item>
+        <item name="tabIndicatorHeight">2dp</item>
+        <item name="tabPaddingStart">12dp</item>
+        <item name="tabPaddingEnd">12dp</item>
+        <item name="tabBackground">?attr/selectableItemBackground</item>
+        <item name="tabTextAppearance">@style/TextAppearance.Design.Tab</item>
+        <item name="tabSelectedTextColor">?android:textColorPrimary</item>
     </style>
 </resources>

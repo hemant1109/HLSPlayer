@@ -6,6 +6,21 @@
     android:layout_height="match_parent"
     tools:background="@color/exo_black_opacity_60">
 
+    <ImageView
+        android:id="@+id/ivPlayerMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginVertical="5dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:focusable="true"
+        android:scaleType="center"
+        android:padding="5dp"
+        android:src="@drawable/ic_menu_vert_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -47,6 +62,16 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/exo_position"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/exo_progress"
+        app:layout_constraintStart_toStartOf="@+id/exo_progress"
+        app:layout_constraintTop_toTopOf="@+id/exo_fullscreen"
+        tools:text="01:01" />
+
+    <TextView
         android:id="@+id/txtDivider"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -78,16 +103,8 @@
         app:layout_constraintTop_toTopOf="@+id/exo_position"
         tools:text="01:01" />
 
-    <TextView
-        android:id="@+id/exo_position"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/exo_progress"
-        app:layout_constraintStart_toStartOf="@+id/exo_progress"
-        app:layout_constraintTop_toTopOf="@+id/exo_fullscreen"
-        tools:text="01:01" />
-    <TextView
+
+    <!--<TextView
         android:id="@+id/exo_playback_speed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -100,9 +117,9 @@
         app:layout_constraintBottom_toTopOf="@+id/exo_progress"
         app:layout_constraintEnd_toStartOf="@+id/exo_fullscreen"
         app:layout_constraintTop_toTopOf="@+id/exo_fullscreen"
-        tools:text="@string/playback_speed" />
+        tools:text="@string/playback_speed" />-->
 
-    <TextView
+    <!--<TextView
         android:id="@+id/select_tracks_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -115,13 +132,13 @@
         app:layout_constraintBottom_toTopOf="@+id/exo_progress"
         app:layout_constraintEnd_toStartOf="@+id/exo_playback_speed"
         app:layout_constraintTop_toTopOf="@+id/exo_fullscreen"
-        tools:text="@string/exo_track_selection_auto" />
+        tools:text="@string/exo_track_selection_auto" />-->
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/exo_fullscreen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
+        android:layout_marginEnd="5dp"
         android:adjustViewBounds="true"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
@@ -137,10 +154,13 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_margin="15dp"
+        app:bar_height="2.5dp"
         app:buffered_color="@color/buffered"
         app:layout_constraintBottom_toBottomOf="parent"
         app:played_color="@color/played"
         app:scrubber_color="@color/scrubber"
+        app:scrubber_dragged_size="16dp"
+        app:scrubber_enabled_size="14dp"
         app:unplayed_color="@color/unplayed"
         tools:layout_editor_absoluteX="15dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
