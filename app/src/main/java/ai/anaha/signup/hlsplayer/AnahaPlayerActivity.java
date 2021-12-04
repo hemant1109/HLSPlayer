@@ -18,7 +18,6 @@ package ai.anaha.signup.hlsplayer;
 import static com.google.android.exoplayer2.util.Assertions.checkNotNull;
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
@@ -54,7 +53,6 @@ import com.google.android.exoplayer2.source.MediaSourceFactory;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.ui.StyledPlayerControlView;
 import com.google.android.exoplayer2.ui.StyledPlayerView;
-import com.google.android.exoplayer2.ui.TrackSelectionDialogBuilder;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.util.DebugTextViewHelper;
 import com.google.android.exoplayer2.util.ErrorMessageProvider;
@@ -103,6 +101,7 @@ public class AnahaPlayerActivity extends AppCompatActivity implements OnClickLis
     private long startPosition;
     private float playbackSpeed = 1;
     private TrackSelectionDialog trackSelectionDialog;
+    private View root;
     // For ad playback only.
     // Activity lifecycle.
 
@@ -124,7 +123,7 @@ public class AnahaPlayerActivity extends AppCompatActivity implements OnClickLis
         exoFullscreen.setEnabled(false);
         exoFullscreen.getDrawable().setTint(getColor(R.color.unplayed));
         //exoPause = findViewById(R.id.exo_pause);
-
+        root = findViewById(R.id.root);
         playerView = findViewById(R.id.player_view);
         playerView.setControllerVisibilityListener(this);
         playerView.setErrorMessageProvider(new PlayerErrorMessageProvider());
@@ -148,22 +147,30 @@ public class AnahaPlayerActivity extends AppCompatActivity implements OnClickLis
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
             exoFullscreen.performClick();
         }
+        root.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
-    @Override
-    public void onConfigurationChanged(@NonNull Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        // Checks the orientation of the screen
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            //make activity full screen/ Landscape
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            //end
-        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            //make activity portrait
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            //end
-        }
-    }
+
+//    @Override
+//    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+//        super.onConfigurationChanged(newConfig);
+//        // Checks the orientation of the screen
+//        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+//            //make activity full screen/ Landscape
+//            /*root.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);*/
+//            //getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//            //end
+//        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+//            //make activity portrait
+//            //getWindow().clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//            //end
+//        }
+//    }
 
     @Override
     public void onNewIntent(Intent intent) {

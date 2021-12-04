@@ -39,5 +39,7 @@
     <string name="prefer_extension_decoders">Prefer extension decoders</string>
     <string name="normal">Normal</string>
     <string name="playback_speed">Speed</string>
+    <string name="play_pause">Play/Pause</string>
+    <string name="menu">Menu</string>
 
 </resources>
