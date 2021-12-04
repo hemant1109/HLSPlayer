@@ -15,8 +15,8 @@
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
         android:focusable="true"
-        android:scaleType="center"
         android:padding="5dp"
+        android:scaleType="center"
         android:src="@drawable/ic_menu_vert_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -32,7 +32,7 @@
 
         <include
             android:id="@+id/rewind"
-            layout="@layout/exo_styled_player_control_rewind_button"
+            layout="@layout/custom_exo_styled_player_control_rewind_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
@@ -42,16 +42,17 @@
 
         <ImageView
             android:id="@+id/exo_play_pause"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
             android:layout_gravity="center"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
             android:padding="10dp"
             android:scaleType="fitXY"
             android:src="@drawable/exo_ic_play_circle_filled" />
 
         <include
             android:id="@+id/ffwd"
-            layout="@layout/exo_styled_player_control_ffwd_button"
+            layout="@layout/custom_exo_styled_player_control_ffwd_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"

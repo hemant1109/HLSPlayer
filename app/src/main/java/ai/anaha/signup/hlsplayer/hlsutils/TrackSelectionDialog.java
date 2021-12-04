@@ -54,7 +54,6 @@ import ai.anaha.signup.hlsplayer.R;
 import ai.anaha.signup.hlsplayer.adapters.FragmentAdapter;
 import ai.anaha.signup.hlsplayer.fragments.PlayBackSpeedViewFragment;
 import ai.anaha.signup.hlsplayer.fragments.TrackSelectionFragment;
-import ai.anaha.signup.hlsplayer.fragments.TrackSelectionViewFragment;
 
 /**
  * Dialog to select tracks.
@@ -212,7 +211,7 @@ public final class TrackSelectionDialog extends BottomSheetDialogFragment {
                         initialParameters.getRendererDisabled(/* rendererIndex= */ i),
                         initialParameters.getSelectionOverride(/* rendererIndex= */ i, trackGroupArray),
                         allowAdaptiveSelections,
-                        allowMultipleOverrides, customTrackSelectedListener,null);
+                        allowMultipleOverrides, customTrackSelectedListener, null);
                 tabFragments.put(i, tabFragment);
                 tabTrackTypes.add(trackType);
             }
