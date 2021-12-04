@@ -6,14 +6,13 @@
         android:layout_height="wrap_content"
         android:layout_margin="0dp"
         android:layout_gravity="center"
+        android:background="@drawable/ripple_drawable"
         android:addStatesFromChildren="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
         style="@style/ExoStyledControls.Button.Center">
         <!-- View's don't have foreground until API 23 so we have to nest in a parent. -->
         <Button android:id="@id/exo_rew_with_amount"
             android:layout_width="75dp"
             android:layout_height="75dp"
-            android:foreground="?attr/selectableItemBackgroundBorderless"
             android:background="@drawable/exo_styled_controls_rewind"
             android:layout_marginLeft="0dp"
             android:layout_marginRight="0dp"
