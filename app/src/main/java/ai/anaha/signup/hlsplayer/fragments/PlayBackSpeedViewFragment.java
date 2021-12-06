@@ -17,7 +17,7 @@ import ai.anaha.signup.hlsplayer.adapters.PlaybackSpeedAdapter;
 public final class PlayBackSpeedViewFragment extends Fragment {
 
     private final AnahaPlayerActivity.PlaybackSpeedListener playbackSpeedListener;
-    private float playbackSpeed = 1;
+    private float playbackSpeed;
 
     public PlayBackSpeedViewFragment(float playbackSpeed, AnahaPlayerActivity.PlaybackSpeedListener playbackSpeedListener) {
         // Retain instance across activity re-creation to prevent losing access to init data.
@@ -34,9 +34,10 @@ public final class PlayBackSpeedViewFragment extends Fragment {
         View rootView =
                 inflater.inflate(
                         R.layout.custom_exo_track_selection_dialog, container, /* attachToRoot= */ false);
+        rootView.findViewById(R.id.tvTitle).setVisibility(View.GONE);
         PlaybackSpeedAdapter playbackSpeedAdapter = new PlaybackSpeedAdapter(
-                container.getContext().getResources().getStringArray(com.google.android.exoplayer2.ui.R.array.exo_playback_speeds),
-                container.getContext().getResources().getIntArray(com.google.android.exoplayer2.ui.R.array.exo_speed_multiplied_by_100),
+                container.getContext().getResources().getStringArray(R.array.exo_playback_speeds),
+                container.getContext().getResources().getIntArray(R.array.exo_speed_multiplied_by_100),
                 playbackSpeedListener);
         playbackSpeedAdapter.updateSelectedIndex(playbackSpeed);
         RecyclerView settingsView = rootView.findViewById(R.id.exo_settings_listview);

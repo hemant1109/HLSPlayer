@@ -1,9 +1,13 @@
 package ai.anaha.signup.hlsplayer.fragments;
 
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -23,19 +27,21 @@ import java.util.List;
 
 import ai.anaha.signup.hlsplayer.R;
 import ai.anaha.signup.hlsplayer.adapters.TrackSelectionViewAdapter;
-import ai.anaha.signup.hlsplayer.hlsutils.TrackSelectionDialog;
+import ai.anaha.signup.hlsplayer.hlsutils.PlayerSettingsDialog;
 
 public final class TrackSelectionFragment extends Fragment {
 
     private MappingTrackSelector.MappedTrackInfo mappedTrackInfo;
     private int rendererIndex;
     private boolean allowMultipleOverrides;
-    TrackSelectionDialog.OnCustomTrackSelectedListener dismissListener;
+    PlayerSettingsDialog.OnCustomTrackSelectedListener dismissListener;
     /* package */ public boolean isDisabled;
     /* package */ public List<DefaultTrackSelector.SelectionOverride> overrides;
     ArrayList<TrackInfo> trackInfos;
     ArrayList<String> trackNames;
     private Comparator<TrackInfo> trackInfoComparator;
+    private String title;
+    private TextView tvTitle;
 
     public TrackSelectionFragment() {
         // Retain instance across activity re-creation to prevent losing access to init data.
@@ -50,6 +56,15 @@ public final class TrackSelectionFragment extends Fragment {
         View rootView =
                 inflater.inflate(
                         R.layout.custom_exo_track_selection_dialog, container, /* attachToRoot= */ false);
+        tvTitle = rootView.findViewById(R.id.tvTitle);
+        String tempTitle = String.format("%s   •   %s",getString(R.string.quality_for_current_video_u2022), title);
+        int startIndex = tempTitle.indexOf(title);
+        SpannableString spannable = new SpannableString(tempTitle);
+        spannable.setSpan(
+                new ForegroundColorSpan(requireContext().getColor(R.color.exo_white_opacity_50)),
+                startIndex, startIndex + title.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        tvTitle.setText(spannable);
 
         TrackGroupArray trackGroups = mappedTrackInfo.getTrackGroups(rendererIndex);
         for (int groupIndex = 0; groupIndex < trackGroups.length; groupIndex++) {
@@ -88,7 +103,7 @@ public final class TrackSelectionFragment extends Fragment {
             boolean initialIsDisabled,
             @Nullable DefaultTrackSelector.SelectionOverride initialOverride,
             boolean allowAdaptiveSelections,
-            boolean allowMultipleOverrides, TrackSelectionDialog.OnCustomTrackSelectedListener listener,
+            boolean allowMultipleOverrides, PlayerSettingsDialog.OnCustomTrackSelectedListener listener,
             Comparator<Format> trackFormatComparator) {
         this.mappedTrackInfo = mappedTrackInfo;
         this.rendererIndex = rendererIndex;
@@ -103,6 +118,10 @@ public final class TrackSelectionFragment extends Fragment {
                 trackFormatComparator == null
                         ? null
                         : (o1, o2) -> trackFormatComparator.compare(o1.format, o2.format);
+    }
+
+    public void setTitle(String strTitle) {
+        this.title = strTitle;
     }
 
     public static final class TrackInfo {

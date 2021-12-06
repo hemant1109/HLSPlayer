@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.exoplayer2.util.Util;
 
 import ai.anaha.signup.hlsplayer.AnahaPlayerActivity;
+import ai.anaha.signup.hlsplayer.R;
 
 public final class PlaybackSpeedAdapter extends RecyclerView.Adapter<PlaybackSpeedAdapter.SubSettingViewHolder> {
 
@@ -42,16 +43,11 @@ public final class PlaybackSpeedAdapter extends RecyclerView.Adapter<PlaybackSpe
         selectedIndex = closestMatchIndex;
     }
 
-    public String getSelectedText() {
-        return playbackSpeedTexts[selectedIndex];
-    }
-
     @Override
     public SubSettingViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v =
                 LayoutInflater.from(parent.getContext())
-                        .inflate(
-                                com.google.android.exoplayer2.ui.R.layout.exo_styled_sub_settings_list_item, parent, /* attachToRoot= */ false);
+                        .inflate(R.layout.custom_exo_styled_track_list_item, null);
         return new SubSettingViewHolder(v);
     }
 
@@ -86,8 +82,8 @@ public final class PlaybackSpeedAdapter extends RecyclerView.Adapter<PlaybackSpe
                 // Workaround for https://github.com/google/ExoPlayer/issues/9061.
                 itemView.setFocusable(true);
             }
-            textView = itemView.findViewById(com.google.android.exoplayer2.ui.R.id.exo_text);
-            checkView = itemView.findViewById(com.google.android.exoplayer2.ui.R.id.exo_check);
+            textView = itemView.findViewById(R.id.exo_text);
+            checkView = itemView.findViewById(R.id.exo_check);
         }
     }
 }

@@ -63,10 +63,11 @@ import com.google.android.exoplayer2.video.VideoSize;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import ai.anaha.signup.hlsplayer.hlsutils.DemoUtil;
 import ai.anaha.signup.hlsplayer.hlsutils.IntentUtil;
-import ai.anaha.signup.hlsplayer.hlsutils.TrackSelectionDialog;
+import ai.anaha.signup.hlsplayer.hlsutils.PlayerSettingsDialog;
 
 /**
  * An activity that plays media using {@link ExoPlayer}.
@@ -100,7 +101,7 @@ public class AnahaPlayerActivity extends AppCompatActivity implements OnClickLis
     private int startItemIndex;
     private long startPosition;
     private float playbackSpeed = 1;
-    private TrackSelectionDialog trackSelectionDialog;
+    private PlayerSettingsDialog playerSettingsDialog;
     // For ad playback only.
     // Activity lifecycle.
 
@@ -279,72 +280,47 @@ public class AnahaPlayerActivity extends AppCompatActivity implements OnClickLis
     public void onClick(View view) {
         if (view == ivPlayerMenu
                 && !isShowingTrackSelectionDialog
-                && TrackSelectionDialog.willHaveContent(trackSelector)) {
+                && PlayerSettingsDialog.willHaveContent(trackSelector)) {
             isShowingTrackSelectionDialog = true;
-            trackSelectionDialog =
-                    TrackSelectionDialog.createForTrackSelector(true, false, false,
-                            trackSelector, (width, height) -> {
-                                /*String string = height + "p";
-                                if (width == -1 && height == -1) {
-                                    string = String.format("%s (%s)",
-                                            getString(R.string.exo_track_selection_auto),
-                                            getVideoQualityString(Objects.requireNonNull(Objects.requireNonNull(player).getVideoFormat()).width, Objects.requireNonNull(player.getVideoFormat()).height));
-                                } else if (width == 1920 && height == 1080) {
-                                    string = getString(R.string.exo_track_selection_fhd);
-                                } else if (width == 1600 && height == 900) {
-                                    string = getString(R.string.exo_track_selection_hdp);
-                                } else if (width == 1280 && height == 720) {
-                                    string = getString(R.string.exo_track_selection_hd);
-                                } else if (width == 960 && height == 540) {
-                                    string = getString(R.string.exo_track_selection_qhd);
-                                } else if (width == 852 && height == 480) {
-                                    string = getString(R.string.exo_track_selection_480p);
-                                } else if (width == 640 && height == 360) {
-                                    string = getString(R.string.exo_track_selection_360p);
-                                } else if (width == 576 && height == 324) {
-                                    string = getString(R.string.exo_track_selection_360p);
-                                } else if (width == 480 && height == 270) {
-                                    string = getString(com.google.android.exoplayer2.ui.R.string.exo_track_resolution,
-                                            width, height);
-                                } else {
-                                    string = getString(com.google.android.exoplayer2.ui.R.string.exo_track_resolution,
-                                            width, height);
-                                }*/
-                                //selectTracks.setText(string);
-                            },
-                            /* onDismissListener= */ dismissedDialog -> isShowingTrackSelectionDialog = false, playbackSpeed, speed -> {
-                                if (player != null) {
-                                    playbackSpeed = speed;
-                                    player.setPlaybackSpeed(speed);
-                                    trackSelectionDialog.dismiss();
-                                }
-                            });
-            trackSelectionDialog.show(getSupportFragmentManager(), /* tag= */ null);
-
+            PlayerSettingsDialog.SettingItemClickListener settingItemClickListener = position -> {
+                playerSettingsDialog.dismiss();
+                switch (position) {
+                    case 0:
+                        //Report
+                        Toast.makeText(this, "Report clicked", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 1:
+                    case 2:
+                        playerSettingsDialog = PlayerSettingsDialog.createForTrackSelector(position - 1,
+                                getVideoQualityString(Objects.requireNonNull(Objects.requireNonNull(player).getVideoFormat()).height)
+                                , true, false, false, trackSelector,
+                                /* onDismissListener= */ dismissedDialog -> isShowingTrackSelectionDialog = false, playbackSpeed, /*PlaybackSpeedListener= */speed -> {
+                                    if (player != null) {
+                                        playbackSpeed = speed;
+                                        player.setPlaybackSpeed(speed);
+                                        playerSettingsDialog.dismiss();
+                                    }
+                                });
+                        playerSettingsDialog.show(getSupportFragmentManager(), /* tag= */ null);
+                        break;
+                    case 3:
+                        //Help and feedback
+                        Toast.makeText(this, "Help and feedback clicked", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            };
+            playerSettingsDialog = new PlayerSettingsDialog(getVideoQualityString(Objects.requireNonNull(Objects.requireNonNull(player).getVideoFormat()).height), playbackSpeed);
+            playerSettingsDialog.SetSettingItemClickListener(settingItemClickListener);
+            playerSettingsDialog.setOnDismissListener(/* onDismissListener= */ dismissedDialog -> isShowingTrackSelectionDialog = false);
+            playerSettingsDialog.show(getSupportFragmentManager(), /* tag= */ null);
         }
     }
 
-    /*String getVideoQualityString(int width, int height) {
-        String string = height + "p";
-        if (width == 1920 && height == 1080) {
-            string = height+"p";
-        } else if (width == 1600 && height == 900) {
-            string = getString(R.string.exo_track_selection_hdp);
-        } else if (width == 1280 && height == 720) {
-            string = getString(R.string.exo_track_selection_hd);
-        } else if (width == 960 && height == 540) {
-            string = getString(R.string.exo_track_selection_qhd);
-        } else if (width == 852 && height == 480) {
-            string = getString(R.string.exo_track_selection_480p);
-        } else if (width == 640 && height == 360) {
-            string = getString(R.string.exo_track_selection_360p);
-        } else if (width == 576 && height == 324) {
-            string = getString(R.string.exo_track_selection_360p);
-        }
-        return string;
-    }*/
+    String getVideoQualityString(int height) {
+        return height + "p";
+    }
 
-    public interface TrackSelectionName {
+    public interface TrackSelectionNameListener {
 
         void selectedTrackName(int width, int height);
     }

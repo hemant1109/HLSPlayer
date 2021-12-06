@@ -16,7 +16,7 @@ import java.util.Collections;
 import java.util.List;
 
 import ai.anaha.signup.hlsplayer.R;
-import ai.anaha.signup.hlsplayer.hlsutils.TrackSelectionDialog;
+import ai.anaha.signup.hlsplayer.hlsutils.PlayerSettingsDialog;
 
 /**
  * Fragment to show a track selection in tab of the track selection dialog.
@@ -28,7 +28,7 @@ public final class TrackSelectionViewFragment extends Fragment
     private int rendererIndex;
     private boolean allowAdaptiveSelections;
     private boolean allowMultipleOverrides;
-    TrackSelectionDialog.OnCustomTrackSelectedListener dismissListener;
+    PlayerSettingsDialog.OnCustomTrackSelectedListener dismissListener;
     /* package */ public boolean isDisabled;
     /* package */ public List<DefaultTrackSelector.SelectionOverride> overrides;
 
@@ -43,7 +43,7 @@ public final class TrackSelectionViewFragment extends Fragment
             boolean initialIsDisabled,
             @Nullable DefaultTrackSelector.SelectionOverride initialOverride,
             boolean allowAdaptiveSelections,
-            boolean allowMultipleOverrides, TrackSelectionDialog.OnCustomTrackSelectedListener listener) {
+            boolean allowMultipleOverrides, PlayerSettingsDialog.OnCustomTrackSelectedListener listener) {
         this.mappedTrackInfo = mappedTrackInfo;
         this.rendererIndex = rendererIndex;
         this.isDisabled = initialIsDisabled;

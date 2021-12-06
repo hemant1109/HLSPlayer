@@ -7,7 +7,6 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -25,12 +24,12 @@ import java.util.List;
 
 import ai.anaha.signup.hlsplayer.R;
 import ai.anaha.signup.hlsplayer.fragments.TrackSelectionFragment;
-import ai.anaha.signup.hlsplayer.hlsutils.TrackSelectionDialog;
+import ai.anaha.signup.hlsplayer.hlsutils.PlayerSettingsDialog;
 
 public final class TrackSelectionViewAdapter extends RecyclerView.Adapter<TrackSelectionViewAdapter.SubSettingViewHolder> {
 
     private final ArrayList<String> trackNames;
-    private final TrackSelectionDialog.OnCustomTrackSelectedListener onCustomTrackSelectedListener;
+    private final PlayerSettingsDialog.OnCustomTrackSelectedListener onCustomTrackSelectedListener;
     private final ArrayList<TrackSelectionFragment.TrackInfo> trackInfos;
     private final TrackSelectionView.TrackSelectionListener listener;
     private final MappingTrackSelector.MappedTrackInfo mappedTrackInfo;
@@ -44,7 +43,7 @@ public final class TrackSelectionViewAdapter extends RecyclerView.Adapter<TrackS
 
     public TrackSelectionViewAdapter(MappingTrackSelector.MappedTrackInfo mappedTrackInfo,
                                      ArrayList<String> trackNames, ArrayList<TrackSelectionFragment.TrackInfo> trackInfos, boolean allowMultipleOverrides,
-                                     List<DefaultTrackSelector.SelectionOverride> overrides, TrackSelectionDialog.OnCustomTrackSelectedListener onCustomTrackSelectedListener,
+                                     List<DefaultTrackSelector.SelectionOverride> overrides, PlayerSettingsDialog.OnCustomTrackSelectedListener onCustomTrackSelectedListener,
                                      @Nullable TrackSelectionView.TrackSelectionListener listener) {
         this.mappedTrackInfo = mappedTrackInfo;
         this.trackNames = trackNames;
@@ -74,16 +73,12 @@ public final class TrackSelectionViewAdapter extends RecyclerView.Adapter<TrackS
         selectedIndex = closestMatchIndex;
     }*/
 
-    public String getSelectedText() {
-        return trackNames.get(selectedIndex);
-    }
-
     @Override
     public SubSettingViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v =
                 LayoutInflater.from(parent.getContext())
                         .inflate(
-                                com.google.android.exoplayer2.ui.R.layout.exo_styled_sub_settings_list_item, parent, /* attachToRoot= */ false);
+                                R.layout.custom_exo_styled_track_list_item, parent, /* attachToRoot= */ false);
         return new SubSettingViewHolder(v);
     }
 
@@ -116,11 +111,11 @@ public final class TrackSelectionViewAdapter extends RecyclerView.Adapter<TrackS
             holder.itemView.setOnClickListener(
                     v -> {
                         if (position != selectedIndex) {
-                            lastCheckedView.setVisibility(INVISIBLE);
-                            holder.checkView.setVisibility(VISIBLE);
                             onTrackViewClicked(holder.checkView);
                             listener.onTrackSelectionChanged(isDisabled, getOverrides());
                             onCustomTrackSelectedListener.onTrackSelected();
+                            lastCheckedView.setVisibility(INVISIBLE);
+                            holder.checkView.setVisibility(VISIBLE);
                         }
                     });
 

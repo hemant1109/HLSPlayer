@@ -31,15 +31,26 @@
 
     <string name="error_no_secure_decoder">This device does not provide a secure decoder for <xliff:g id="mime_type">%1$s</xliff:g></string>
 
-    <string name="track_selection_title">Video quality</string>
-
     <string name="enter_urls">Enter URLs</string>
     <string name="sample_list_load_error">One or more sample lists failed to load</string>
 
     <string name="prefer_extension_decoders">Prefer extension decoders</string>
     <string name="normal">Normal</string>
-    <string name="playback_speed">Speed</string>
+    <string name="playback_speed">Playback speed</string>
     <string name="play_pause">Play/Pause</string>
     <string name="menu">Menu</string>
+    <string name="quality_for_current_video_u2022">Quality for current video</string>
 
+    <string-array name="exo_settings" translatable="false">
+        <item>Report</item>
+        <item>Quality</item>
+        <item>@string/playback_speed</item>
+        <item>Help and feedback</item>
+    </string-array>
+    <integer-array name="exo_settings_icons">
+        <item>@drawable/ic_outline_flag_24</item>
+        <item>@drawable/ic_outline_settings_24</item>
+        <item>@drawable/ic_baseline_slow_motion_video_24</item>
+        <item>@drawable/ic_baseline_help_outline_24</item>
+    </integer-array>
 </resources>

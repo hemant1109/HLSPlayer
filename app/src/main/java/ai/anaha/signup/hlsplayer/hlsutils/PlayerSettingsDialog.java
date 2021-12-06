@@ -15,8 +15,6 @@
  */
 package ai.anaha.signup.hlsplayer.hlsutils;
 
-import static android.view.View.VISIBLE;
-
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.res.Resources;
@@ -29,11 +27,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.exoplayer2.C;
-import com.google.android.exoplayer2.Format;
-import com.google.android.exoplayer2.source.TrackGroup;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector.SelectionOverride;
@@ -42,31 +37,32 @@ import com.google.android.exoplayer2.util.Assertions;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 import ai.anaha.signup.hlsplayer.AnahaPlayerActivity;
 import ai.anaha.signup.hlsplayer.R;
-import ai.anaha.signup.hlsplayer.adapters.FragmentAdapter;
 import ai.anaha.signup.hlsplayer.fragments.PlayBackSpeedViewFragment;
+import ai.anaha.signup.hlsplayer.fragments.SettingsFragment;
 import ai.anaha.signup.hlsplayer.fragments.TrackSelectionFragment;
 
 /**
  * Dialog to select tracks.
  */
-public final class TrackSelectionDialog extends BottomSheetDialogFragment {
+public final class PlayerSettingsDialog extends BottomSheetDialogFragment {
 
     private static boolean isVideoSelectionEnabled, isAudioSelectionEnabled, isSubtitleSelectionEnabled = true;
+    private static String strVideoQuality;
     private final SparseArray<Fragment> tabFragments;
     private final ArrayList<Integer> tabTrackTypes;
+    private final float playbackSpeed;
 
     //private DialogInterface.OnClickListener onClickListener;
     private DialogInterface.OnDismissListener onDismissListener;
-
+    private SettingItemClickListener settingItemClickListener;
+    private Fragment fragment = null;
 
     /**
      * Returns whether a track selection dialog will have content to display if initialized with the
@@ -98,19 +94,20 @@ public final class TrackSelectionDialog extends BottomSheetDialogFragment {
      * @param onDismissListener     A {@link DialogInterface.OnDismissListener} to call when the dialog is
      * @param playbackSpeedListener
      */
-    public static TrackSelectionDialog createForTrackSelector(Boolean isVideoSelectionEnabled, Boolean isAudioSelectionEnabled, Boolean isSubtitleSelectionEnabled,
-                                                              DefaultTrackSelector trackSelector, AnahaPlayerActivity.TrackSelectionName trackSelectionName,
+    public static PlayerSettingsDialog createForTrackSelector(int position,
+                                                              String strVideoQuality, Boolean isVideoSelectionEnabled, Boolean isAudioSelectionEnabled, Boolean isSubtitleSelectionEnabled,
+                                                              DefaultTrackSelector trackSelector,
                                                               DialogInterface.OnDismissListener onDismissListener, float playbackSpeed,
                                                               AnahaPlayerActivity.PlaybackSpeedListener playbackSpeedListener) {
         MappedTrackInfo mappedTrackInfo =
                 Assertions.checkNotNull(trackSelector.getCurrentMappedTrackInfo());
-        TrackSelectionDialog trackSelectionDialog = new TrackSelectionDialog();
+        PlayerSettingsDialog playerSettingsDialog = new PlayerSettingsDialog(strVideoQuality, playbackSpeed);
         DefaultTrackSelector.Parameters parameters = trackSelector.getParameters();
-        trackSelectionDialog.init(isVideoSelectionEnabled, isAudioSelectionEnabled, isSubtitleSelectionEnabled,
+        playerSettingsDialog.init(position, isVideoSelectionEnabled, isAudioSelectionEnabled, isSubtitleSelectionEnabled,
                 mappedTrackInfo,
                 /* initialParameters = */ parameters,
-                /* allowAdaptiveSelections= */ false,
-                /* allowMultipleOverrides= */ false,
+                /* allowAdaptiveSelections= */
+                /* allowMultipleOverrides= */
                 /* onCustomTrackSelectedListener= */ () -> {
                     DefaultTrackSelector.ParametersBuilder builder = parameters.buildUpon();
                     for (int i = 0; i < mappedTrackInfo.getRendererCount(); i++) {
@@ -118,106 +115,95 @@ public final class TrackSelectionDialog extends BottomSheetDialogFragment {
                                 .clearSelectionOverrides(/* rendererIndex= */ i)
                                 .setRendererDisabled(
                                         /* rendererIndex= */ i,
-                                        trackSelectionDialog.getIsDisabled(/* rendererIndex= */ i));
+                                        playerSettingsDialog.getIsDisabled(/* rendererIndex= */ i));
                         List<SelectionOverride> overrides =
-                                trackSelectionDialog.getOverrides(/* rendererIndex= */ i);
+                                playerSettingsDialog.getOverrides(/* rendererIndex= */ i);
                         if (!overrides.isEmpty()) {
                             builder.setSelectionOverride(
                                     /* rendererIndex= */ i,
                                     mappedTrackInfo.getTrackGroups(/* rendererIndex= */ i),
                                     overrides.get(0));
                         }
-                        int trackType = mappedTrackInfo.getRendererType(i);
+                        /*int trackType = mappedTrackInfo.getRendererType(i);
                         if (C.TRACK_TYPE_VIDEO == trackType) {
                             //0 for video fragment in dialog
-                            if (!trackSelectionDialog.getIsDisabled(/* rendererIndex= */ i)
+                            if (!playerSettingsDialog.getIsDisabled(*//* rendererIndex= *//* i)
                                     && overrides.size() == 0) {
-                                trackSelectionName.selectedTrackName(-1, -1);
+                                trackSelectionNameListener.selectedTrackName(-1, -1);
                             } else {
-                                TrackGroupArray trackGroups = mappedTrackInfo.getTrackGroups(/* rendererIndex= */i);
+                                TrackGroupArray trackGroups = mappedTrackInfo.getTrackGroups(*//* rendererIndex= *//*i);
                                 for (int groupIndex = 0; groupIndex < trackGroups.length; groupIndex++) {
                                     TrackGroup group = trackGroups.get(groupIndex);
                                     for (int trackIndex = 0; trackIndex < group.length; trackIndex++) {
                                         Format format = group.getFormat(trackIndex);
                                         if (overrides.get(0).containsTrack(Integer.parseInt(
                                                 Objects.requireNonNull(format.id)))) {
-                                            trackSelectionName.selectedTrackName(format.width, format.height);
+                                            trackSelectionNameListener.selectedTrackName(format.width, format.height);
                                         }
                                     }
                                 }
                             }
-                        }
+                        }*/
                     }
                     trackSelector.setParameters(builder);
-                    trackSelectionDialog.dismiss();
+                    playerSettingsDialog.dismiss();
                 },
                 onDismissListener, playbackSpeed, playbackSpeedListener);
-        return trackSelectionDialog;
+        return playerSettingsDialog;
     }
 
-    /**
-     * Creates a dialog for given {@link MappedTrackInfo} and {@link DefaultTrackSelector.Parameters}.
-     *
-     * @param mappedTrackInfo         The {@link MappedTrackInfo} to display.
-     * @param initialParameters       The {@link DefaultTrackSelector.Parameters} describing the
-     *                                initial track selection.
-     * @param allowAdaptiveSelections Whether adaptive selections (consisting of more than one track)
-     *                                can be made.
-     * @param allowMultipleOverrides  Whether tracks from multiple track groups can be selected.
-     * @param onDismissListener       {@link DialogInterface.OnDismissListener} called when the dialog
-     *                                is dismissed.
-     */
-    public static TrackSelectionDialog createForMappedTrackInfoAndParameters(Boolean isVideoSelectionEnabled, Boolean isAudioSelectionEnabled, Boolean isSubtitleSelectionEnabled,
-                                                                             MappedTrackInfo mappedTrackInfo,
-                                                                             DefaultTrackSelector.Parameters initialParameters,
-                                                                             boolean allowAdaptiveSelections,
-                                                                             boolean allowMultipleOverrides, OnCustomTrackSelectedListener onCustomTrackSelectedListener,
-                                                                             DialogInterface.OnDismissListener onDismissListener) {
-        TrackSelectionDialog trackSelectionDialog = new TrackSelectionDialog();
-        trackSelectionDialog.init(isVideoSelectionEnabled, isAudioSelectionEnabled, isSubtitleSelectionEnabled,
-                mappedTrackInfo,
-                initialParameters,
-                allowAdaptiveSelections,
-                allowMultipleOverrides, onCustomTrackSelectedListener,
-                onDismissListener, 1,/*playbackSpeedListener*/null);
-        return trackSelectionDialog;
+
+    public void setOnDismissListener(DialogInterface.OnDismissListener onDismissListener) {
+        this.onDismissListener = onDismissListener;
     }
 
-    public TrackSelectionDialog() {
+    public PlayerSettingsDialog(String strVideoQuality, float playbackSpeed) {
+        PlayerSettingsDialog.strVideoQuality = strVideoQuality;
+        this.playbackSpeed = playbackSpeed;
         tabFragments = new SparseArray<>();
         tabTrackTypes = new ArrayList<>();
         // Retain instance across activity re-creation to prevent losing access to init data.
         setRetainInstance(true);
     }
 
-    private void init(Boolean isVideoSelectionEnabled, Boolean isAudioSelectionEnabled, Boolean isSubtitleSelectionEnabled,
+    private void init(int position, Boolean isVideoSelectionEnabled, Boolean isAudioSelectionEnabled, Boolean isSubtitleSelectionEnabled,
                       MappedTrackInfo mappedTrackInfo,
                       DefaultTrackSelector.Parameters initialParameters,
-                      boolean allowAdaptiveSelections,
-                      boolean allowMultipleOverrides, OnCustomTrackSelectedListener customTrackSelectedListener,
+                      OnCustomTrackSelectedListener customTrackSelectedListener,
                       DialogInterface.OnDismissListener onDismissListener, float playbackSpeed, AnahaPlayerActivity.PlaybackSpeedListener playbackSpeedListener) {
         this.onDismissListener = onDismissListener;
-        TrackSelectionDialog.isVideoSelectionEnabled = isVideoSelectionEnabled;
-        TrackSelectionDialog.isAudioSelectionEnabled = isAudioSelectionEnabled;
-        TrackSelectionDialog.isSubtitleSelectionEnabled = isSubtitleSelectionEnabled;
+        PlayerSettingsDialog.isVideoSelectionEnabled = isVideoSelectionEnabled;
+        PlayerSettingsDialog.isAudioSelectionEnabled = isAudioSelectionEnabled;
+        PlayerSettingsDialog.isSubtitleSelectionEnabled = isSubtitleSelectionEnabled;
         for (int i = 0; i < mappedTrackInfo.getRendererCount(); i++) {
-            if (showTabForRenderer(mappedTrackInfo, i)) {
-                int trackType = mappedTrackInfo.getRendererType(/* rendererIndex= */ i);
+            int trackType = mappedTrackInfo.getRendererType(/* rendererIndex= */ i);
+            if (C.TRACK_TYPE_VIDEO == trackType) {
                 TrackGroupArray trackGroupArray = mappedTrackInfo.getTrackGroups(i);
                 TrackSelectionFragment tabFragment = new TrackSelectionFragment();
+                tabFragment.setTitle(strVideoQuality);
                 tabFragment.init(
                         mappedTrackInfo,
                         /* rendererIndex= */ i,
                         initialParameters.getRendererDisabled(/* rendererIndex= */ i),
                         initialParameters.getSelectionOverride(/* rendererIndex= */ i, trackGroupArray),
-                        allowAdaptiveSelections,
-                        allowMultipleOverrides, customTrackSelectedListener, null);
+                        false,
+                        false, customTrackSelectedListener, null);
                 tabFragments.put(i, tabFragment);
                 tabTrackTypes.add(trackType);
+                break;
             }
         }
         tabFragments.put(tabFragments.size(), new PlayBackSpeedViewFragment(playbackSpeed, playbackSpeedListener));
         tabTrackTypes.add(C.TRACK_TYPE_CUSTOM_BASE);
+        setFragment(tabFragments.get(position));
+    }
+
+    private void setFragment(Fragment fragment) {
+        this.fragment = fragment;
+    }
+
+    public void SetSettingItemClickListener(SettingItemClickListener settingItemClickListener) {
+        this.settingItemClickListener = settingItemClickListener;
     }
 
     public interface OnCustomTrackSelectedListener {
@@ -258,9 +244,6 @@ public final class TrackSelectionDialog extends BottomSheetDialogFragment {
         // We need to own the view to let tab layout work correctly on all API levels. We can't use
         // AlertDialog because it owns the view itself, so we use AppCompatDialog instead, themed using
         // the AlertDialog theme overlay with force-enabled title.
-        /*AppCompatDialog dialog =
-                new AppCompatDialog(getActivity(), R.style.TrackSelectionDialogThemeOverlay);
-        dialog.setTitle(titleId);*/
         BottomSheetDialog dialog = (BottomSheetDialog) super.onCreateDialog(savedInstanceState);
         dialog.getBehavior().setPeekHeight(Resources.getSystem().getDisplayMetrics().heightPixels);
         dialog.getBehavior().setState(BottomSheetBehavior.STATE_EXPANDED);
@@ -283,21 +266,15 @@ public final class TrackSelectionDialog extends BottomSheetDialogFragment {
     public View onCreateView(
             LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View dialogView = inflater.inflate(R.layout.track_selection_dialog, container, false);
-        TabLayout tabLayout = dialogView.findViewById(R.id.track_selection_dialog_tab_layout);
-        ViewPager viewPager = dialogView.findViewById(R.id.track_selection_dialog_view_pager);
-        /*Button cancelButton = dialogView.findViewById(R.id.track_selection_dialog_cancel_button);
-        Button okButton = dialogView.findViewById(R.id.track_selection_dialog_ok_button);*/
-        viewPager.setAdapter(new FragmentAdapter(getResources(), getChildFragmentManager(), tabFragments, tabTrackTypes));
-        tabLayout.setupWithViewPager(viewPager);
-        tabLayout.setVisibility(tabFragments.size() > 1 ? VISIBLE : View.GONE);
-        //cancelButton.setOnClickListener(view -> dismiss());
-        /*okButton.setOnClickListener(
-                view -> {
-                    onClickListener.onClick(getDialog(), DialogInterface.BUTTON_POSITIVE);
-                    dismiss();
-                });*/
-
+        if (fragment == null) {
+            fragment = new SettingsFragment(settingItemClickListener, strVideoQuality, playbackSpeed);
+        }
+        getChildFragmentManager().beginTransaction().replace(R.id.fragment_container_view, fragment).commit();
         return dialogView;
+    }
+
+    public interface SettingItemClickListener {
+        void settingItemClick(int adapterPosition);
     }
 
     private static boolean showTabForRenderer(MappedTrackInfo mappedTrackInfo, int rendererIndex) {
