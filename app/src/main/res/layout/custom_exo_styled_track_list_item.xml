@@ -30,7 +30,7 @@
             android:layout_marginEnd="4dp"
             android:gravity="center|start"
             android:minHeight="@dimen/exo_settings_height"
-            android:textColor="@color/exo_white"
+            android:textColor="?attr/colorOnPrimary"
             android:textDirection="locale"
             android:textSize="16sp"
             tools:text="test" />

@@ -12,6 +12,7 @@
     <color name="exo_white_opacity_70">#B3ffffff</color>
     <color name="exo_black_opacity_70">#B3000000</color>
     <color name="exo_black_opacity_60">#98000000</color>
+    <color name="exo_black_opacity_50">#80000000</color>
     <color name="exo_black_opacity_05">#0D000000</color>
     <color name="exo_black_1">#212121</color>
 

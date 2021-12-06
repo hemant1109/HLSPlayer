@@ -78,6 +78,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             app:layout_constraintBottom_toTopOf="@+id/exo_progress"
+            android:textColor="@color/white"
             app:layout_constraintStart_toStartOf="@+id/exo_progress"
             app:layout_constraintTop_toTopOf="@+id/exo_fullscreen"
             tools:text="01:01" />
@@ -87,6 +88,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/divider"
+            android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="@+id/exo_position"
             app:layout_constraintEnd_toEndOf="@+id/exo_duration"
             app:layout_constraintStart_toStartOf="@+id/exo_position"
@@ -109,6 +111,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
+            android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="@+id/exo_position"
             app:layout_constraintStart_toEndOf="@+id/exo_position"
             app:layout_constraintTop_toTopOf="@+id/exo_position"
@@ -155,6 +158,8 @@
             android:clickable="true"
             android:focusable="true"
             android:padding="5dp"
+            app:tint="@color/white"
+            android:tint="@color/white"
             android:src="@drawable/exo_ic_fullscreen_enter"
             app:layout_constraintBottom_toTopOf="@+id/exo_progress"
             app:layout_constraintEnd_toEndOf="@+id/exo_progress" />

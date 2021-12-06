@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,7 +62,9 @@ public final class TrackSelectionFragment extends Fragment {
         int startIndex = tempTitle.indexOf(title);
         SpannableString spannable = new SpannableString(tempTitle);
         spannable.setSpan(
-                new ForegroundColorSpan(requireContext().getColor(R.color.exo_white_opacity_50)),
+                new ForegroundColorSpan(ai.anaha.signup.hlsplayer.hlsutils.Util.INSTANCE
+                        .getColorFromAttr(requireContext(), R.attr.coloredTextColor,
+                                new TypedValue(), true)),
                 startIndex, startIndex + title.length(),
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         tvTitle.setText(spannable);

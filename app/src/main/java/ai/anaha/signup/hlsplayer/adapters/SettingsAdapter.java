@@ -4,6 +4,7 @@ import android.content.res.TypedArray;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,7 +68,9 @@ public final class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.
         int startIndex = tempStr.indexOf(coloredText);
         SpannableString spannable = new SpannableString(tempStr);
         spannable.setSpan(
-                new ForegroundColorSpan(holder.textView.getContext().getColor(R.color.exo_white_opacity_50)),
+                new ForegroundColorSpan(ai.anaha.signup.hlsplayer.hlsutils.Util.INSTANCE
+                        .getColorFromAttr(holder.textView.getContext(), R.attr.coloredTextColor,
+                                new TypedValue(), true)),
                 startIndex, startIndex + coloredText.length(),
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         return spannable;
