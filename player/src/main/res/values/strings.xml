@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="app_name">HLSPLayer</string>
+    <string name="app_name">Player</string>
     <string name="playback_speed">Playback speed</string>
     <string name="quality">Quality</string>
     <string name="menu">Menu</string>

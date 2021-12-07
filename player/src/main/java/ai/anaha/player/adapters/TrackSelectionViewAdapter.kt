@@ -1,8 +1,8 @@
-package ai.anaha.hlsplayer.adapters
+package ai.anaha.player.adapters
 
-import ai.anaha.hlsplayer.R
-import ai.anaha.hlsplayer.fragments.TrackSelectionFragment
-import ai.anaha.hlsplayer.hlsutils.PlayerSettingsDialog.OnCustomTrackSelectedListener
+import ai.anaha.player.R
+import ai.anaha.player.fragments.TrackSelectionFragment
+import ai.anaha.player.utils.PlayerSettingsDialog.OnCustomTrackSelectedListener
 import android.util.SparseArray
 import android.view.LayoutInflater
 import android.view.View

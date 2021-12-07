@@ -1,7 +1,7 @@
-package ai.anaha.hlsplayer
+package ai.anaha.player
 
-import ai.anaha.hlsplayer.SampleListLoader.PlaylistGroup
-import ai.anaha.hlsplayer.SampleListLoader.PlaylistHolder
+import ai.anaha.player.SampleListLoader.PlaylistGroup
+import ai.anaha.player.SampleListLoader.PlaylistHolder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

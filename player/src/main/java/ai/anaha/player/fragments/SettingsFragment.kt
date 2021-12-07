@@ -1,8 +1,8 @@
-package ai.anaha.hlsplayer.fragments
+package ai.anaha.player.fragments
 
-import ai.anaha.hlsplayer.R
-import ai.anaha.hlsplayer.adapters.SettingsAdapter
-import ai.anaha.hlsplayer.hlsutils.PlayerSettingsDialog.SettingItemClickListener
+import ai.anaha.player.R
+import ai.anaha.player.adapters.SettingsAdapter
+import ai.anaha.player.utils.PlayerSettingsDialog.SettingItemClickListener
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View

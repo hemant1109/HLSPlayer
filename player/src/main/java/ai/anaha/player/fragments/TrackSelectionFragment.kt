@@ -1,9 +1,9 @@
-package ai.anaha.hlsplayer.fragments
+package ai.anaha.player.fragments
 
-import ai.anaha.hlsplayer.R
-import ai.anaha.hlsplayer.adapters.TrackSelectionViewAdapter
-import ai.anaha.hlsplayer.hlsutils.PlayerSettingsDialog.OnCustomTrackSelectedListener
-import ai.anaha.hlsplayer.hlsutils.getColorFromAttr
+import ai.anaha.player.R
+import ai.anaha.player.adapters.TrackSelectionViewAdapter
+import ai.anaha.player.utils.PlayerSettingsDialog.OnCustomTrackSelectedListener
+import ai.anaha.player.utils.getColorFromAttr
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString

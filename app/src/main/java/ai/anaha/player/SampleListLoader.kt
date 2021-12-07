@@ -1,7 +1,7 @@
-package ai.anaha.hlsplayer
+package ai.anaha.player
 
-import ai.anaha.hlsplayer.SampleListLoader.PlaylistGroup
-import ai.anaha.hlsplayer.hlsutils.DemoUtil
+import ai.anaha.player.SampleListLoader.PlaylistGroup
+import ai.anaha.player.utils.DemoUtil
 import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri

@@ -1,4 +1,4 @@
-package ai.anaha.hlsplayer
+package ai.anaha.player
 
 import org.junit.Test
 

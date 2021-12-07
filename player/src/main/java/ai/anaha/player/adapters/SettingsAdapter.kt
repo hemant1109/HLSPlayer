@@ -1,8 +1,8 @@
-package ai.anaha.hlsplayer.adapters
+package ai.anaha.player.adapters
 
-import ai.anaha.hlsplayer.R
-import ai.anaha.hlsplayer.hlsutils.PlayerSettingsDialog.SettingItemClickListener
-import ai.anaha.hlsplayer.hlsutils.getColorFromAttr
+import ai.anaha.player.R
+import ai.anaha.player.utils.PlayerSettingsDialog.SettingItemClickListener
+import ai.anaha.player.utils.getColorFromAttr
 import android.content.res.TypedArray
 import android.text.Spannable
 import android.text.SpannableString

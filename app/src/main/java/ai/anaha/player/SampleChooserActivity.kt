@@ -1,9 +1,9 @@
-package ai.anaha.hlsplayer
+package ai.anaha.player
 
 
-import ai.anaha.hlsplayer.SampleListLoader.PlaylistHolder
-import ai.anaha.hlsplayer.hlsutils.DemoUtil
-import ai.anaha.hlsplayer.hlsutils.IntentUtil
+import ai.anaha.player.SampleListLoader.PlaylistHolder
+import ai.anaha.player.utils.DemoUtil
+import ai.anaha.player.utils.IntentUtil
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager

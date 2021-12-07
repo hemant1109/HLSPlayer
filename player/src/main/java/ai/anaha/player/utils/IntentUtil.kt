@@ -1,4 +1,4 @@
-package ai.anaha.hlsplayer.hlsutils
+package ai.anaha.player.utils
 
 import android.content.Intent
 import android.net.Uri

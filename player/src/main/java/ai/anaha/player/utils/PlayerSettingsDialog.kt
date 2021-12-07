@@ -1,10 +1,10 @@
-package ai.anaha.hlsplayer.hlsutils
+package ai.anaha.player.utils
 
-import ai.anaha.hlsplayer.PlayerActivity.PlaybackSpeedListener
-import ai.anaha.hlsplayer.R
-import ai.anaha.hlsplayer.fragments.PlayBackSpeedViewFragment
-import ai.anaha.hlsplayer.fragments.SettingsFragment
-import ai.anaha.hlsplayer.fragments.TrackSelectionFragment
+import ai.anaha.player.PlayerActivity.PlaybackSpeedListener
+import ai.anaha.player.R
+import ai.anaha.player.fragments.PlayBackSpeedViewFragment
+import ai.anaha.player.fragments.SettingsFragment
+import ai.anaha.player.fragments.TrackSelectionFragment
 import android.app.Dialog
 import android.content.DialogInterface
 import android.content.res.Resources

@@ -1,12 +1,12 @@
-package ai.anaha.hlsplayer
+package ai.anaha.player
 
-import ai.anaha.hlsplayer.hlsutils.DemoUtil.buildRenderersFactory
-import ai.anaha.hlsplayer.hlsutils.DemoUtil.getDataSourceFactory
-import ai.anaha.hlsplayer.hlsutils.IntentUtil
-import ai.anaha.hlsplayer.hlsutils.IntentUtil.createMediaItemsFromIntent
-import ai.anaha.hlsplayer.hlsutils.PlayerSettingsDialog
-import ai.anaha.hlsplayer.hlsutils.PlayerSettingsDialog.Companion.createForTrackSelector
-import ai.anaha.hlsplayer.hlsutils.PlayerSettingsDialog.SettingItemClickListener
+import ai.anaha.player.utils.DemoUtil.buildRenderersFactory
+import ai.anaha.player.utils.DemoUtil.getDataSourceFactory
+import ai.anaha.player.utils.IntentUtil
+import ai.anaha.player.utils.IntentUtil.createMediaItemsFromIntent
+import ai.anaha.player.utils.PlayerSettingsDialog
+import ai.anaha.player.utils.PlayerSettingsDialog.Companion.createForTrackSelector
+import ai.anaha.player.utils.PlayerSettingsDialog.SettingItemClickListener
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.ActivityInfo
