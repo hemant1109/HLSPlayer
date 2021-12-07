@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="white">#FFFFFFFF</color>
+    <color name="black">#FF000000</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="anaha_blue">#2E64DE</color>
+    <color name="buffered">#BECEF3</color>
+    <color name="played">#3662C6</color>
+    <color name="scrubber">#114ACC</color>
+    <color name="unplayed">#26FFFFFF</color>
+    <color name="exo_black_1">#212121</color>
+    <color name="exo_white_opacity_50">#80FFFFFF</color>
+
+</resources>

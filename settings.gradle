@@ -8,3 +8,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "HLSPlayer"
 include ':app'
+include ':HLSPlayer'

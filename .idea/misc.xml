@@ -14,6 +14,11 @@
         <entry key="../../.gradle/caches/transforms-3/b0d7be698c5c971becdcbccc742104e1/transformed/jetified-exoplayer-ui-2.16.1/res/layout/exo_styled_settings_list.xml" value="0.203125" />
         <entry key="../../.gradle/caches/transforms-3/b0d7be698c5c971becdcbccc742104e1/transformed/jetified-exoplayer-ui-2.16.1/res/layout/exo_styled_sub_settings_list_item.xml" value="0.29010416666666666" />
         <entry key="../../.gradle/caches/transforms-3/b0d7be698c5c971becdcbccc742104e1/transformed/jetified-exoplayer-ui-2.16.1/res/layout/exo_track_selection_dialog.xml" value="0.35572916666666665" />
+        <entry key="HLSPlayer/src/main/res/drawable/ic_baseline_help_outline_24.xml" value="0.26666666666666666" />
+        <entry key="HLSPlayer/src/main/res/drawable/ic_outline_settings_24.xml" value="0.26666666666666666" />
+        <entry key="HLSPlayer/src/main/res/drawable/ripple_drawable.xml" value="0.26145833333333335" />
+        <entry key="HLSPlayer/src/main/res/layout/anaha_player_activity.xml" value="0.21510416666666668" />
+        <entry key="HLSPlayer/src/main/res/layout/track_selection_dialog.xml" value="0.25052083333333336" />
         <entry key="app/src/main/res/drawable/ic_baseline_help_outline_24.xml" value="0.2625" />
         <entry key="app/src/main/res/drawable/ic_baseline_slow_motion_video_24.xml" value="0.2625" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.2625" />
@@ -33,6 +38,7 @@
         <entry key="app/src/main/res/layout/custom_exo_track_selection_dialog.xml" value="0.3958333333333333" />
         <entry key="app/src/main/res/layout/custom_settings_list_item.xml" value="0.35572916666666665" />
         <entry key="app/src/main/res/layout/player_custom_control.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/sample_chooser_activity.xml" value="0.21510416666666668" />
         <entry key="app/src/main/res/layout/sample_list_item.xml" value="0.35572916666666665" />
         <entry key="app/src/main/res/layout/track_selection_dialog.xml" value="0.35572916666666665" />
         <entry key="app/src/main/res/menu/sample_chooser_menu.xml" value="0.35572916666666665" />

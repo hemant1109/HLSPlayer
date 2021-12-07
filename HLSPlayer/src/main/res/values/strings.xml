@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_name">HLSPLayer</string>
+    <string name="playback_speed">Playback speed</string>
+    <string name="quality">Quality</string>
+    <string name="menu">Menu</string>
+    <string name="divider">/</string>
+    <string name="play_pause">Play/Pause</string>
+    <string name="storage_permission_denied">Permission to access storage was denied</string>
+    <string name="unexpected_intent_action">Unexpected intent action: <xliff:g id="action">%1$s</xliff:g></string>
+    <string name="error_cleartext_not_permitted">Cleartext HTTP traffic not permitted. See https://exoplayer.dev/issues/cleartext-not-permitted</string>
+    <string name="error_drm_unsupported_before_api_18">DRM content not supported on API levels below 18</string>
+    <string name="error_drm_unsupported_scheme">This device does not support the required DRM scheme</string>
+    <string name="error_unsupported_video">Media includes video tracks, but none are playable by this device</string>
+    <string name="error_unsupported_audio">Media includes audio tracks, but none are playable by this device</string>
+    <string name="error_generic">Playback failed</string>
+    <string name="error_querying_decoders">Unable to query device decoders</string>
+    <string name="error_no_secure_decoder">This device does not provide a secure decoder for <xliff:g id="mime_type">%1$s</xliff:g></string>
+    <string name="error_no_decoder">This device does not provide a decoder for <xliff:g id="mime_type">%1$s</xliff:g></string>
+    <string name="error_instantiating_decoder">Unable to instantiate decoder <xliff:g id="decoder_name">%1$s</xliff:g></string>
+    <string name="quality_for_current_video_u2022">Quality for current video</string>
+
+
+
+
+    <string-array name="exo_settings" translatable="false">
+        <item>@string/quality</item>
+        <item>@string/playback_speed</item>
+        <item>Help and feedback</item>
+        <item>Report</item>
+    </string-array>
+    <integer-array name="exo_settings_icons">
+        <item>@drawable/ic_outline_settings_24</item>
+        <item>@drawable/ic_baseline_slow_motion_video_24</item>
+        <item>@drawable/ic_baseline_help_outline_24</item>
+        <item>@drawable/ic_outline_flag_24</item>
+    </integer-array>
+</resources>

@@ -1,28 +1,4 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="TrackSelectionDialogThemeOverlay" parent="Theme.Design.BottomSheetDialog">
-        <item name="windowNoTitle">false</item>
-        <item name="android:windowNoTitle">false</item>
-        <item name="android:colorBackground">@color/white</item>
-    </style>
-
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar" />
-
-    <style name="PlayerTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/white</item>
-        <item name="colorPrimaryVariant">@color/black</item>
-        <item name="colorOnPrimary">@color/black</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_200</item>
-        <item name="colorOnSecondary">@color/white</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-        <item name="android:indeterminateTint">@color/anaha_blue</item>
-        <item name="android:colorControlNormal">@color/white</item>
-        <!--for selection item color-->
-        <!--<item name="colorControlActivated">@color/anaha_blue</item>-->
-        <item name="android:textColor">@color/black</item>
-    </style>
 </resources>
