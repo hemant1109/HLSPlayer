@@ -17,13 +17,10 @@ import java.util.*
 object IntentUtil {
     // Actions.
     const val ACTION_VIEW = "com.google.android.exoplayer.demo.action.VIEW"
-    const val ACTION_VIEW_LIST = "com.google.android.exoplayer.demo.action.VIEW_LIST"
 
     // Activity extras.
     const val PREFER_EXTENSION_DECODERS_EXTRA = "prefer_extension_decoders"
 
-    // Media item configuration extras.
-    private const val URI_EXTRA = "uri"
     private const val TITLE_EXTRA = "title"
     private const val MIME_TYPE_EXTRA = "mime_type"
     private const val CLIP_START_POSITION_MS_EXTRA = "clip_start_position_ms"
@@ -45,22 +42,8 @@ object IntentUtil {
     @JvmStatic
     fun createMediaItemsFromIntent(intent: Intent): List<MediaItem> {
         val mediaItems: MutableList<MediaItem> = ArrayList()
-        if (ACTION_VIEW_LIST == intent.action) {
-            var index = 0
-            while (intent.hasExtra(URI_EXTRA + "_" + index)) {
-                val uri = Uri.parse(intent.getStringExtra(URI_EXTRA + "_" + index))
-                mediaItems.add(
-                    createMediaItemFromIntent(
-                        uri, intent,  /* extrasKeySuffix= */
-                        "_$index"
-                    )
-                )
-                index++
-            }
-        } else {
-            val uri = intent.data
-            mediaItems.add(createMediaItemFromIntent(uri, intent,  /* extrasKeySuffix= */""))
-        }
+        val uri = intent.data
+        mediaItems.add(createMediaItemFromIntent(uri, intent))
         return mediaItems
     }
 
@@ -92,32 +75,15 @@ object IntentUtil {
             if (mediaItem.mediaMetadata.title != null) {
                 intent.putExtra(TITLE_EXTRA, mediaItem.mediaMetadata.title)
             }
-            addPlaybackPropertiesToIntent(localConfiguration, intent,  /* extrasKeySuffix= */"")
+            addPlaybackPropertiesToIntent(localConfiguration, intent)
             addClippingConfigurationToIntent(
-                mediaItem.clippingConfiguration, intent,  /* extrasKeySuffix= */""
+                mediaItem.clippingConfiguration, intent
             )
-        } else {
-            intent.action = ACTION_VIEW_LIST
-            for (i in mediaItems.indices) {
-                val mediaItem = mediaItems[i]
-                val localConfiguration = Assertions.checkNotNull(mediaItem.localConfiguration)
-                intent.putExtra(URI_EXTRA + "_$i", localConfiguration.uri.toString())
-                addPlaybackPropertiesToIntent(
-                    localConfiguration, intent,  /* extrasKeySuffix= */
-                    "_$i"
-                )
-                addClippingConfigurationToIntent(
-                    mediaItem.clippingConfiguration, intent,  /* extrasKeySuffix= */"_$i"
-                )
-                if (mediaItem.mediaMetadata.title != null) {
-                    intent.putExtra(TITLE_EXTRA + "_$i", mediaItem.mediaMetadata.title)
-                }
-            }
         }
     }
 
     private fun createMediaItemFromIntent(
-        uri: Uri?, intent: Intent, extrasKeySuffix: String
+        uri: Uri?, intent: Intent, extrasKeySuffix: String = ""
     ): MediaItem {
         val mimeType = intent.getStringExtra(MIME_TYPE_EXTRA + extrasKeySuffix)
         val title = intent.getStringExtra(TITLE_EXTRA + extrasKeySuffix)
@@ -213,7 +179,7 @@ object IntentUtil {
     }
 
     private fun addPlaybackPropertiesToIntent(
-        localConfiguration: LocalConfiguration, intent: Intent, extrasKeySuffix: String
+        localConfiguration: LocalConfiguration, intent: Intent, extrasKeySuffix: String = ""
     ) {
         intent
             .putExtra(MIME_TYPE_EXTRA + extrasKeySuffix, localConfiguration.mimeType)
@@ -282,7 +248,7 @@ object IntentUtil {
     private fun addClippingConfigurationToIntent(
         clippingConfiguration: ClippingConfiguration,
         intent: Intent,
-        extrasKeySuffix: String
+        extrasKeySuffix: String = ""
     ) {
         if (clippingConfiguration.startPositionMs != 0L) {
             intent.putExtra(

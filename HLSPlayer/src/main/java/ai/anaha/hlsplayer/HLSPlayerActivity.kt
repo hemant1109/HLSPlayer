@@ -163,7 +163,7 @@ open class HLSPlayerActivity : AppCompatActivity(), View.OnClickListener,
         requestCode: Int, permissions: Array<String>, grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (grantResults.size == 0) {
+        if (grantResults.isEmpty()) {
             // Empty results are triggered if a permission is requested while another request was already
             // pending and can be safely ignored in this case.
             return
@@ -306,8 +306,7 @@ open class HLSPlayerActivity : AppCompatActivity(), View.OnClickListener,
 
     private fun createMediaItems(intent: Intent): List<MediaItem> {
         val action = intent.action
-        val actionIsListView = IntentUtil.ACTION_VIEW_LIST == action
-        if (!actionIsListView && IntentUtil.ACTION_VIEW != action) {
+        if (IntentUtil.ACTION_VIEW != action) {
             showToast(getString(R.string.unexpected_intent_action, action))
             finish()
             return emptyList()
@@ -391,7 +390,7 @@ open class HLSPlayerActivity : AppCompatActivity(), View.OnClickListener,
         }
     }
 
-    protected fun clearStartPosition() {
+    private fun clearStartPosition() {
         startAutoPlay = true
         startItemIndex = C.INDEX_UNSET
         startPosition = C.TIME_UNSET
