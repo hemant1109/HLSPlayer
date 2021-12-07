@@ -47,7 +47,7 @@ public final class PlaybackSpeedAdapter extends RecyclerView.Adapter<PlaybackSpe
     public SubSettingViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v =
                 LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.custom_exo_styled_track_list_item, null);
+                        .inflate(R.layout.custom_exo_styled_track_list_item, parent, /* attachToRoot= */ false);
         return new SubSettingViewHolder(v);
     }
 

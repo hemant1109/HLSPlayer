@@ -16,6 +16,7 @@
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">@android:color/black</item>
         <item name="coloredTextColor">@color/exo_white_opacity_50</item>
+        <item name="android:indeterminateTint">@color/anaha_blue</item>
 
     </style>
 </resources>

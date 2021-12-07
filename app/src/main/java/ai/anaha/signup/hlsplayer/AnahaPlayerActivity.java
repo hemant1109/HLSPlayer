@@ -102,6 +102,7 @@ public class AnahaPlayerActivity extends AppCompatActivity implements OnClickLis
     private long startPosition;
     private float playbackSpeed = 1;
     private PlayerSettingsDialog playerSettingsDialog;
+    private View root;
     // For ad playback only.
     // Activity lifecycle.
 
@@ -123,7 +124,7 @@ public class AnahaPlayerActivity extends AppCompatActivity implements OnClickLis
         exoFullscreen.setEnabled(false);
         exoFullscreen.getDrawable().setTint(getColor(R.color.unplayed));
         //exoPause = findViewById(R.id.exo_pause);
-        View root = findViewById(R.id.root);
+        root = findViewById(R.id.root);
         playerView = findViewById(R.id.player_view);
         playerView.setControllerVisibilityListener(this);
         playerView.setErrorMessageProvider(new PlayerErrorMessageProvider());
@@ -147,10 +148,6 @@ public class AnahaPlayerActivity extends AppCompatActivity implements OnClickLis
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
             exoFullscreen.performClick();
         }
-        root.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
@@ -286,12 +283,8 @@ public class AnahaPlayerActivity extends AppCompatActivity implements OnClickLis
                 playerSettingsDialog.dismiss();
                 switch (position) {
                     case 0:
-                        //Report
-                        Toast.makeText(this, "Report clicked", Toast.LENGTH_SHORT).show();
-                        break;
                     case 1:
-                    case 2:
-                        playerSettingsDialog = PlayerSettingsDialog.createForTrackSelector(position - 1,
+                        playerSettingsDialog = PlayerSettingsDialog.createForTrackSelector(position,
                                 getVideoQualityString(Objects.requireNonNull(Objects.requireNonNull(player).getVideoFormat()).height)
                                 , true, false, false, trackSelector,
                                 /* onDismissListener= */ dismissedDialog -> isShowingTrackSelectionDialog = false, playbackSpeed, /*PlaybackSpeedListener= */speed -> {
@@ -303,9 +296,13 @@ public class AnahaPlayerActivity extends AppCompatActivity implements OnClickLis
                                 });
                         playerSettingsDialog.show(getSupportFragmentManager(), /* tag= */ null);
                         break;
-                    case 3:
+                    case 2:
                         //Help and feedback
                         Toast.makeText(this, "Help and feedback clicked", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 3:
+                        //Report
+                        Toast.makeText(this, "Report clicked", Toast.LENGTH_SHORT).show();
                         break;
                 }
             };
@@ -503,9 +500,15 @@ public class AnahaPlayerActivity extends AppCompatActivity implements OnClickLis
     @Override
     public void onFullScreenModeChanged(boolean isFullScreen) {
         if (isFullScreen) {
+            root.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
             exoFullscreen.postDelayed(() -> exoFullscreen.setImageResource(R.drawable.exo_ic_fullscreen_exit), 200);
         } else {
+            root.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    |  View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             exoFullscreen.postDelayed(() -> exoFullscreen.setImageResource(R.drawable.exo_ic_fullscreen_enter), 200);
         }

@@ -47,9 +47,9 @@ public final class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.
     @Override
     public void onBindViewHolder(@NonNull SubSettingViewHolder holder, int position) {
         if (position < settingNames.length) {
-            if (position == 1) {
+            if (settingNames[position].equals(holder.textView.getContext().getString(R.string.quality))) {
                 holder.textView.setText(getSpannableString(holder, settingNames[position], strVideoQuality));
-            } else if (position == 2) {
+            } else if (settingNames[position].equals(holder.textView.getContext().getString(R.string.playback_speed))) {
                 holder.textView.setText(getSpannableString(holder, settingNames[position], selectedPlaybackSpeedTexts));
             } else
                 holder.textView.setText(settingNames[position]);
