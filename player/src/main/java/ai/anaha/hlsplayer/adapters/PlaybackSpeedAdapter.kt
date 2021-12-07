@@ -1,6 +1,6 @@
 package ai.anaha.hlsplayer.adapters
 
-import ai.anaha.hlsplayer.HLSPlayerActivity.PlaybackSpeedListener
+import ai.anaha.hlsplayer.PlayerActivity.PlaybackSpeedListener
 import ai.anaha.hlsplayer.R
 import android.view.LayoutInflater
 import android.view.View

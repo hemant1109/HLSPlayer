@@ -1,6 +1,6 @@
 package ai.anaha.hlsplayer.fragments
 
-import ai.anaha.hlsplayer.HLSPlayerActivity.PlaybackSpeedListener
+import ai.anaha.hlsplayer.PlayerActivity.PlaybackSpeedListener
 import ai.anaha.hlsplayer.R
 import ai.anaha.hlsplayer.adapters.PlaybackSpeedAdapter
 import android.os.Bundle

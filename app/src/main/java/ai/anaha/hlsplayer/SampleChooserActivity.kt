@@ -79,7 +79,7 @@ class SampleChooserActivity : AppCompatActivity(), OnChildClickListener {
                 prefEditor.putInt(CHILD_POSITION_PREFERENCE_KEY, -1)
                 prefEditor.apply()
                 val uri = txtUrls.text.toString()
-                val playerActivityIntent = Intent(this, HLSPlayerActivity::class.java)
+                val playerActivityIntent = Intent(this, PlayerActivity::class.java)
                 playerActivityIntent.putExtra(
                     IntentUtil.PREFER_EXTENSION_DECODERS_EXTRA,
                     isNonNullAndChecked(preferExtensionDecodersMenuItem)
@@ -194,7 +194,7 @@ class SampleChooserActivity : AppCompatActivity(), OnChildClickListener {
         prefEditor.putInt(CHILD_POSITION_PREFERENCE_KEY, childPosition)
         prefEditor.apply()
         val playlistHolder = view.tag as PlaylistHolder
-        val intent = Intent(this, HLSPlayerActivity::class.java)
+        val intent = Intent(this, PlayerActivity::class.java)
         intent.putExtra(
             IntentUtil.PREFER_EXTENSION_DECODERS_EXTRA,
             isNonNullAndChecked(preferExtensionDecodersMenuItem)

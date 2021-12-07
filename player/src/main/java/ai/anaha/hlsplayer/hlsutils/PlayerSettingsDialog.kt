@@ -1,6 +1,6 @@
 package ai.anaha.hlsplayer.hlsutils
 
-import ai.anaha.hlsplayer.HLSPlayerActivity.PlaybackSpeedListener
+import ai.anaha.hlsplayer.PlayerActivity.PlaybackSpeedListener
 import ai.anaha.hlsplayer.R
 import ai.anaha.hlsplayer.fragments.PlayBackSpeedViewFragment
 import ai.anaha.hlsplayer.fragments.SettingsFragment

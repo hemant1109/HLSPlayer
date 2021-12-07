@@ -46,10 +46,10 @@ import kotlin.math.max
 /**
  * An activity that plays media using [ExoPlayer].
  */
-open class HLSPlayerActivity : AppCompatActivity(), View.OnClickListener,
+class PlayerActivity : AppCompatActivity(), View.OnClickListener,
     StyledPlayerControlView.VisibilityListener, OnFullScreenModeChangedListener {
     private var playerView: StyledPlayerView? = null
-    protected var player: ExoPlayer? = null
+    private var player: ExoPlayer? = null
     private var isShowingTrackSelectionDialog = false
     private var exoDuration: TextView? = null
     private var exoFullscreen: ImageView? = null
@@ -227,14 +227,14 @@ open class HLSPlayerActivity : AppCompatActivity(), View.OnClickListener,
                         2 ->
                             //Help and feedback
                             Toast.makeText(
-                                this@HLSPlayerActivity,
+                                this@PlayerActivity,
                                 "Help and feedback clicked",
                                 Toast.LENGTH_SHORT
                             ).show()
                         3 ->
                             //Report
                             Toast.makeText(
-                                this@HLSPlayerActivity,
+                                this@PlayerActivity,
                                 "Report clicked",
                                 Toast.LENGTH_SHORT
                             ).show()

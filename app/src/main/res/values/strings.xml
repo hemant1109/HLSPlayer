@@ -1,5 +1,5 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="app_name">HLSPlayer</string>
+    <string name="app_name">player</string>
     <string name="exo_track_selection_fhd">FHD</string>
     <string name="exo_track_selection_hd">HD</string>
     <string name="exo_track_selection_hdp">HD+</string>
